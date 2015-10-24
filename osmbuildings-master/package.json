@@ -1,0 +1,24 @@
+{
+  "name": "osmbuildings",
+  "private": false,
+  "description": "OSM Buildings",
+  "version": "0.2.0b",
+  "homepage": "http://osmbuildings.org",
+  "author": "@kekscom",
+  "contributors": [
+    "Jan Marsch <jama@keks.com>"
+  ],
+  "maintainers": [],
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:kekscom/osmbuildings.git"
+  },
+  "scripts": {},
+  "dependencies": {},
+  "devDependencies": {
+    "Color": "git+https://github.com/kekscom/Color.js",
+    "jshint": "~1.1.0",
+	  "closure-compiler": "~0.2.0"
+  },
+  "optionalDependencies": {}
+}

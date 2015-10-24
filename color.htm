@@ -1,0 +1,238 @@
+﻿<!-- 
+  Copyright (c) 2015, OpenWebGIS, Fedor Kolomeyko <openwebgisnew@gmail.com>
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification, are
+permitted provided that the following conditions are met:
+
+  1. Redistributions of source code must retain the above copyright notice, this list of
+     conditions and the following disclaimer.
+
+  2. Redistributions in binary form must reproduce the above copyright notice, this list
+     of conditions and the following disclaimer in the documentation and/or other materials
+     provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
+COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ -->
+
+﻿<html><head><title>Edite color interface</title>
+<style type="text/css">
+#paletteC {
+		width:364px; height:20px;
+	}
+	#paletteC div {
+		width:1px; height:20px;
+		float:left;
+	}
+#paletteCstroke {
+		width:364px; height:20px;
+	}
+	#paletteCstroke div {
+		width:1px; height:20px;
+		float:left;
+	}
+
+
+
+#blockleg
+{ background: #ccc; 
+width: 25px;
+ hight: 2px; 
+border: solid 1px black;}
+
+
+</style>
+</head>
+<body>
+
+<div id="paletteC"></div>
+<div id="blockleg"> .</div>
+<input size="8" title="insert color in hexadecimal format. For example: #00FFFF" type="text" id="blockCustColor_id" style="float:left;border: solid 1px black;" value="#0000FF"><button title="Insert color in hexadecimal format. For example: #00FFFF. Then press 'Apply', after that press button 'OK' to view the result " type=button onclick=OK_CustColor_id()><a style="font-size: 10px;">Apply</a></button><br>
+
+
+
+
+<div class="ok"> <button type=button onclick=OK()>OK</button>
+</div><center><font size=+3>
+</font></center>
+</div>
+
+ <script src="openlayers/OpenLayers.js"> </script>
+ <script type="text/javascript" >
+ 
+var colorElemWin;
+
+function OK_CustColor_id()
+{document.getElementById("blockleg").style.background=document.getElementById("blockCustColor_id").value;colorElemWin=document.getElementById("blockCustColor_id").value; }
+
+function OK(){
+//this.close(); 
+//window.opener.LegendFieldMain=document.getElementById("pField").value;
+
+
+
+
+
+if(window.opener.colorElem.id=="colorColorMain")
+{window.opener.document.body.style.background=colorElemWin;} 
+else
+{window.opener.colorElem.parentNode.parentNode.style.background=colorElemWin; }
+//window.opener.updateLegend();
+close();
+}
+ /////////////
+function drawPalette() {
+	var out = "";
+	for (var i = 0; i < 360; i++) {
+		out += "<div onclick='selectColor(this);' style='background-color:" + HSLToRGB(i, 100, 100) + "'><\/div>";
+	}
+		out += "<div onclick='selectColor(this);' style='height:20px; float:left; background-color:#FFFFFF;width:2px;'><\/div>";
+out += "<div onclick='selectColor(this);' style='height:20px; float:left; background-color:#000000;width:2px;'><\/div>";
+	document.getElementById("paletteC").innerHTML = out;
+
+
+}
+
+function drawPaletteStroke() {
+	var out = "";
+	for (var i = 0; i < 360; i++) {
+		out += "<div onclick='selectColorStroke(this);' style='background-color:" + HSLToRGB(i, 100, 100) + "'><\/div>";
+	}
+	out += "<div onclick='selectColorStroke(this);' style='height:20px; float:left; background-color:#FFFFFF;width:2px;'><\/div>";
+out += "<div onclick='selectColorStroke(this);' style='height:20px; float:left; background-color:#000000;width:2px;'><\/div>";
+	
+document.getElementById("paletteCstroke").innerHTML = out;
+
+}
+
+function selectColor(div) {
+	colorElemWin = div.style.backgroundColor;
+	colorElemWin = rgbNormal(colorElemWin);
+document.getElementById("blockleg").style.background=colorElemWin; 
+//window.opener.colorElem.parentNode.parentNode.parentNode.style.background=colorElemWin; 
+//window.opener.document.body.style.background=colorElemWin; 
+//window.opener.fillColorLegend=color;
+	//alert(colorLeg);
+}
+/*function selectColorIndex(div) {
+	 var LegendIndex = div.style.backgroundColor;
+	LegendIndex = rgbNormal(LegendIndex);
+var tt=div.parentNode;
+var ttt=tt.nextSibling.id
+//alert(ttt);
+document.getElementById(ttt).style.background=LegendIndex; 
+//window.opener.fillColorLegend=color;
+	//alert(color);
+}*/
+function rgbNormal(color) {
+	color = color.toString();
+	var re = /rgb\((.*?)\)/i;
+	if(re.test(color)) {
+		compose = RegExp.$1.split(",");
+		var hex = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'];
+		var result = "#";
+		for (var i = 0; i < compose.length; i++) {
+			rgb = parseInt(compose[i]);
+			result += hex[parseInt(rgb / 16)] + hex[rgb % 16];
+		}
+		return result;
+	} else return color;
+}
+
+drawPalette();
+drawPaletteStroke();
+
+
+function HSLToRGB(Hue, Saturation, Luminance) {
+	var R, G, B;
+	var nH, nS, nL;
+	var nF, nP, nQ, nT;
+	var lH;
+	if (Saturation > 0) {
+		nH = Hue / 60;
+		nL = Luminance / 100;
+		nS = Saturation / 100;
+		
+		lH = parseInt(nH);
+		nF = nH - lH;
+		nP = nL * (1 - nS);
+		nQ = nL * (1 - nS * nF);
+		nT = nL * (1 - nS * (1 - nF));
+		switch (lH) {
+			case 0:
+				R = nL * 255;
+				G = nT * 255;
+				B = nP * 255;
+			break;
+			case 1:
+				R = nQ * 255;
+				G = nL * 255;
+				B = nP * 255;
+			break;
+			case 2:
+				R = nP * 255;
+				G = nL * 255;
+				B = nT * 255;
+			break;
+			case 3:
+				R = nP * 255;
+				G = nQ * 255;
+				B = nL * 255;
+			break;
+			case 4:
+				R = nT * 255;
+				G = nP * 255;
+				B = nL * 255;
+			break;
+			case 5:
+				R = nL * 255;
+				G = nP * 255;
+				B = nQ * 255;
+			break;
+		}
+	} else {
+		R = (Luminance * 255) / 100;
+		G = R;
+		B = R;
+	}
+	return RGBToLongSafe(R, G, B);
+}
+	
+function RGBToLongSafe(R, G, B) {
+	R = parseInt(xLimit(R, 0, 255));
+	G = parseInt(xLimit(G, 0, 255));
+	B = parseInt(xLimit(B, 0, 255));
+	return decToHex([R,G,B]);
+}
+
+function decToHex(decArray) {
+	var hex = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'];
+	var out = "#";
+	for (var i = 0; i < decArray.length; i++) {
+		dec = parseInt(decArray[i]);
+		out += hex[parseInt(dec / 16)] + hex[dec % 16];
+	}
+	return out;
+}
+	
+function xLimit(Value, Lower, Higher) {
+	if (Value < Lower) Value = Lower;
+	if (Value > Higher) Value = Higher;
+	return Value;
+}
+
+
+
+///////////
+</script>
+
+</body>
+</html>
