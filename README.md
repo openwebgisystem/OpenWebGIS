@@ -8,7 +8,7 @@ The [OpenWebGIS blog] (http://openwebgisystem.blogspot.com) and [full list of ar
 OpenWebGIS is adapted for Mozilla Firefox and Google Chrome browsers. In other browsers, OpenWebGIS may not display and work correctly. To start OpenWebGIS local version launch the file Start_OpenWebGIS_en.html.
 
 ## To launch in Google Chrome:
-
+(information is taken from [here](http://chrome-allow-file-access-from-file.com) )
 ### On Windows Operating System
 * 1.Get the url of your Chrome Installation path to your chrome installation e.g C:\Users\-your-user-name\AppData\Local\Google\Chrome\Application>
 * 2. Launch the Google Chrome browser from the command line window with the additional argument ‘–allow-file-access-from-files’. E.g ‘path to your chrome installation\chrome.exe --allow-file-access-from-files’
