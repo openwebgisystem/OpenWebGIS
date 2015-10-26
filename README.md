@@ -6,16 +6,16 @@ This is the OpenWebGIS local version. In this version, some functions do not wor
 OpenWebGIS is created for everyone who wishes to see and use a new free GIS. Please make your comments and suggestions. In this GIS you can use the extensive mathematical functionality to calculate and analyze your data. Using OpenWebGIS you will get a Geographic Information System at your disposal, it may be similar in functionality to some desktop GIS. Please support this project.
 The [OpenWebGIS blog] (http://openwebgisystem.blogspot.com) and [full list of articles about OpenWebGIS] (http://openwebgisystem.blogspot.com/2015/08/list-of-articles-about-openwebgis-in.html) provide a lot of information about possibilities for users' data operating.
 OpenWebGIS is adapted for Mozilla Firefox and Google Chrome browsers. In other browsers, OpenWebGIS may not display and work correctly. To start OpenWebGIS local version launch the file Start_OpenWebGIS_en.html.
-To launch in Google Chrome:
-##On Windows Operating System
+* ##To launch in Google Chrome:
+###On Windows Operating System
 * 1.Get the url of your Chrome Installation path to your chrome installation e.g C:\Users\-your-user-name\AppData\Local\Google\Chrome\Application>
 * 2. Launch the Google Chrome browser from the command line window with the additional argument ‘–allow-file-access-from-files’. E.g ‘path to your chrome installation\chrome.exe --allow-file-access-from-files’
 * 3. Temporary method you can use each time you are testing
 - Copy the existing chrome launcher
 - Do as above and save it with a new name e.g chrome - testing
 - Alternatively, you can simply create a new launcher with the above and use it to start chrome.
- 
-##On Linux Operating System (specifically UBUNTU)
+
+###On Linux Operating System (specifically UBUNTU)
 Slightly Permanent Method
 
 * 1.Go to the menu entry/ launcher for Chrome (.desktop file)
