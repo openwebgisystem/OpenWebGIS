@@ -889,7 +889,7 @@ reqcobb.open('GET', 'layers/Countries_base.json', false);
 reqcobb.setRequestHeader("Cache-Control", "no-cache");
 reqcobb.setRequestHeader("Content-type", "text/xml");
 reqcobb.onreadystatechange = function()
-{if(reqcobb.readyState == 4&&reqcobb.status == 200) {
+{if(reqcobb.readyState == 4&&(reqcobb.status == 200||reqcobb.status==0)) {
  
  var formatL=new OpenLayers.Format.GeoJSON({ 'internalProjection': new OpenLayers.Projection("EPSG:900913"),'externalProjection': new OpenLayers.Projection("EPSG:4326")})
  var jsonstringF = formatL.read(reqcobb.responseText);
@@ -899,7 +899,7 @@ reqcobb2.open('GET', 'layers/Countries_base_legend.sld', false);
 reqcobb2.setRequestHeader("Cache-Control", "no-cache");
 reqcobb2.setRequestHeader("Content-type", "text/xml");
 reqcobb2.onreadystatechange = function()
-{if(reqcobb2.readyState == 4&&reqcobb2.status == 200) {
+{if(reqcobb2.readyState == 4&&(reqcobb2.status == 200||reqcobb2.status == 0)) {
 var SLDcont=reqcobb2.responseText
 var format=new OpenLayers.Format.SLD()
 var SLDcont2=SLDcont.split("<NamedLayer>")[1];
@@ -951,18 +951,18 @@ visibility:false
 reqco.open('GET', 'layers/Countries.json', false);   
 reqco.setRequestHeader("Cache-Control", "no-cache");
 reqco.setRequestHeader("Content-type", "text/xml");
+rtt=reqco;
 reqco.onreadystatechange = function()
-{if(reqco.readyState == 4&&reqco.status == 200) {
- 
- var formatL=new OpenLayers.Format.GeoJSON({ 'internalProjection': new OpenLayers.Projection("EPSG:900913"),'externalProjection': new OpenLayers.Projection("EPSG:4326")})
- var jsonstringF = formatL.read(reqco.responseText);
+{if(reqco.readyState == 4&&(reqco.status == 200||reqco.status==0)) {
+var formatL=new OpenLayers.Format.GeoJSON({ 'internalProjection': new OpenLayers.Projection("EPSG:900913"),'externalProjection': new OpenLayers.Projection("EPSG:4326")})
+var jsonstringF = formatL.read(reqco.responseText);
 wfs_cur.addFeatures(jsonstringF);
 var reqco2 = new XMLHttpRequest();  
 reqco2.open('GET', 'layers/Countries_legend.sld', false);   
 reqco2.setRequestHeader("Cache-Control", "no-cache");
 reqco2.setRequestHeader("Content-type", "text/xml");
 reqco2.onreadystatechange = function()
-{if(reqco2.readyState == 4&&reqco2.status == 200) {
+{if(reqco2.readyState == 4&&(reqco2.status == 200||reqco2.status == 0)) {
 var SLDcont=reqco2.responseText
 var format=new OpenLayers.Format.SLD()
 var SLDcont2=SLDcont.split("<NamedLayer>")[1];
@@ -1020,7 +1020,7 @@ req.open('GET', 'layers/Rivers.json', false);
 req.setRequestHeader("Cache-Control", "no-cache");
 req.setRequestHeader("Content-type", "text/xml");
 req.onreadystatechange = function()
-{if(req.readyState == 4&&req.status == 200) {
+{if(req.readyState == 4&&(req.status == 200||req.status == 0)) {
  
  var formatL=new OpenLayers.Format.GeoJSON({ 'internalProjection': new OpenLayers.Projection("EPSG:900913"),'externalProjection': new OpenLayers.Projection("EPSG:4326")})
  var jsonstringF = formatL.read(req.responseText);
@@ -1070,7 +1070,7 @@ reqc.open('GET', 'layers/Cities.json', false);
 reqc.setRequestHeader("Cache-Control", "no-cache");
 reqc.setRequestHeader("Content-type", "text/xml");
 reqc.onreadystatechange = function()
-{if(reqc.readyState == 4&&reqc.status == 200) {
+{if(reqc.readyState == 4&&(reqc.status == 200||reqc.status ==0)) {
  
  var formatL=new OpenLayers.Format.GeoJSON({ 'internalProjection': new OpenLayers.Projection("EPSG:900913"),'externalProjection': new OpenLayers.Projection("EPSG:4326")})
  var jsonstringF = formatL.read(reqc.responseText);
@@ -18583,7 +18583,7 @@ DivEditeLeg.innerHTML='<div id="id_divSelecLeg" style="background:#ffffff; color
 'Layer name<input type="text" size="25" id="CQLfilter_id_Name" value="SelectFilterLayer"/><br>'+
 '<br>'+
 '<a href="http://en.wikipedia.org/wiki/Contextual_Query_Language" target="_blank">CQL</a> <a href="http://docs.geotools.org/stable/userguide/library/cql/index.html" target="_blank">filter</a><input title="insert query string,for example: nameOffield>100 or nameOffield>50 and nameOffield<100. If you apply filter for text fields, you must use single quotes." type="text" size="25" id="CQLfilter_id_Web" value=""/>'+
-'<img src="/geoserver/openlayers/img/east-mini.png" onClick="updateFilter2()" title="Apply filter"/>'+
+'<img src="openlayers/img/east-mini.png" onClick="updateFilter2()" title="Apply filter"/>'+
 '<img title="Reset filter" onclick="clearSelecWin1()" src="openlayers/img/cancel.png"><br>'+
 '<input type="checkbox" id="id_SelecCheck_Web" title="" value="checkbox"/><a>from selected features</a><br>'+
 '<p> <button type=button onclick=NewfromSelect_Layer2()>OK</button></p>'+'</div>';
@@ -24583,8 +24583,8 @@ height:3px;
  <option value="fid">FeatureID</option>
  </select>
  <input type="text" size="80" id="filter" title="If you use filter for text fields, you must use single quotes. Example: CityNAME='London'"/>
- <img id="updateFilterButton" src="/geoserver/openlayers/img/east-mini.png" onClick="updateFilter()" title="Apply filter"/>
- <img id="resetFilterButton" src="/geoserver/openlayers/img/cancel.png" onClick="resetFilter()" title="Reset filter"/>
+ <img id="updateFilterButton" src="openlayers/img/east-mini.png" onClick="updateFilter()" title="Apply filter"/>
+ <img id="resetFilterButton" src="openlayers/img/cancel.png" onClick="resetFilter()" title="Reset filter"/>
  </li>
 <li>
  <a title="Defines the strategy used to interpolate missing values">Interplation: </a>
@@ -24606,20 +24606,20 @@ height:3px;
 <li>
  <a title="Defines the size of the simplify sample">Simplify size: </a>
 <input type="text" size="5" id="SZ" value="30" disabled title="Might work in next version WebGIS"/>
- <img id="updateSZButton" src="/geoserver/openlayers/img/east-mini.png" onClick="updateSZ()" title="click to change simplify size"/>
- <! <img id="resetSZButton" src="http://ams.xoomcode.com/geoserver/openlayers/img/cancel.png" onClick="resetSZ()" title="Reset Simplify size"/>
+ <img id="updateSZButton" src="openlayers/img/east-mini.png" onClick="updateSZ()" title="click to change simplify size"/>
+ <! <img id="resetSZButton" src="http://ams.xoomcode.comopenlayers/img/cancel.png" onClick="resetSZ()" title="Reset Simplify size"/>
  </li>
 <li>
  <a title="Defines the radius used by interpolation">Radius: </a>
 <input type="text" size="5" id="Radius_inter" value="140" disabled title="Might work in next version WebGIS"/>
- <img id="updateRadiusButton" src="/geoserver/openlayers/img/east-mini.png" onClick="updateRadius()" title="click to change radius"/>
- <! <img id="resetRadiusButton" src="http://ams.xoomcode.com/geoserver/openlayers/img/cancel.png" onClick="resetRadius()" title="Reset Simplify size"/>
+ <img id="updateRadiusButton" src="openlayers/img/east-mini.png" onClick="updateRadius()" title="click to change radius"/>
+ <! <img id="resetRadiusButton" src="http://ams.xoomcode.comopenlayers/img/cancel.png" onClick="resetRadius()" title="Reset Simplify size"/>
  </li>
 <li>
  <a title=" Defines a set of real numbers with the property that any number that lies between two numbers in the set is also included in the set. Values must to be speared by comma: 10,20,45,70,100">Intervals[]: </a>
 <input type="text" size="15" id="INTERVALS[]" value="14.014,15.182,15.351,15.52,15.688,15.857,16.025,16.194,16.365" disabled title="Might work in next version WebGIS"/>
- <img id="updateIntervalsButton" src="/geoserver/openlayers/img/east-mini.png" onClick="updateIntervals()" title="click to change intervals"/>
- <! <img id="resetRadiusButton" src="http://ams.xoomcode.com/geoserver/openlayers/img/cancel.png" onClick="resetRadius()" title="Reset Simplify size"/>
+ <img id="updateIntervalsButton" src="openlayers/img/east-mini.png" onClick="updateIntervals()" title="click to change intervals"/>
+ <! <img id="resetRadiusButton" src="http://ams.xoomcode.comopenlayers/img/cancel.png" onClick="resetRadius()" title="Reset Simplify size"/>
  </li>
 <li>
  <a title="Determines how interpolated values are rendered">Renderer type: </a>
