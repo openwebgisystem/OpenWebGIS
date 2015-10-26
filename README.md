@@ -8,18 +8,18 @@ The [OpenWebGIS blog] (http://openwebgisystem.blogspot.com) and [full list of ar
 OpenWebGIS is adapted for Mozilla Firefox and Google Chrome browsers. In other browsers, OpenWebGIS may not display and work correctly. To start OpenWebGIS local version launch the file Start_OpenWebGIS_en.html.
 To launch in Google Chrome:
 ##On Windows Operating System
-1.Get the url of your Chrome Installation path to your chrome installation e.g C:\Users\-your-user-name\AppData\Local\Google\Chrome\Application>
-2. Launch the Google Chrome browser from the command line window with the additional argument ‘–allow-file-access-from-files’. E.g ‘path to your chrome installation\chrome.exe --allow-file-access-from-files’
-3. Temporary method you can use each time you are testing
+* 1.Get the url of your Chrome Installation path to your chrome installation e.g C:\Users\-your-user-name\AppData\Local\Google\Chrome\Application>
+* 2. Launch the Google Chrome browser from the command line window with the additional argument ‘–allow-file-access-from-files’. E.g ‘path to your chrome installation\chrome.exe --allow-file-access-from-files’
+* 3. Temporary method you can use each time you are testing
 - Copy the existing chrome launcher
 - Do as above and save it with a new name e.g chrome - testing
 - Alternatively, you can simply create a new launcher with the above and use it to start chrome.
-- 
+ 
 ##On Linux Operating System (specifically UBUNTU)
 Slightly Permanent Method
 
-1.Go to the menu entry/ launcher for Chrome (.desktop file)
-2.Open the launcher properties dialog.
-3.It should look something like this: ‘/usr/bin/google-chrome %U’
-4.Change it to ‘/usr/bin/google-chrome --allow-access-from-files‘ to make the flags work permanently
-5.You may also need to delete and re-pin your launcher(s) after modifying it. Chrome should launch with the specified flags enabled after the modification.
+* 1.Go to the menu entry/ launcher for Chrome (.desktop file)
+* 2.Open the launcher properties dialog.
+* 3.It should look something like this: ‘/usr/bin/google-chrome %U’
+* 4.Change it to ‘/usr/bin/google-chrome --allow-access-from-files‘ to make the flags work permanently
+* 5.You may also need to delete and re-pin your launcher(s) after modifying it. Chrome should launch with the specified flags enabled after the modification.
