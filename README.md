@@ -23,5 +23,5 @@ Slightly Permanent Method
 * 1.Go to the menu entry/ launcher for Chrome (.desktop file)
 * 2.Open the launcher properties dialog.
 * 3.It should look something like this: ‘/usr/bin/google-chrome %U’
-* 4.Change it to ‘/usr/bin/google-chrome --allow-access-from-files‘ to make the flags work permanently
+* 4.Change it to ‘/usr/bin/google-chrome --allow-file-access-from-files‘ to make the flags work permanently
 * 5.You may also need to delete and re-pin your launcher(s) after modifying it. Chrome should launch with the specified flags enabled after the modification.
