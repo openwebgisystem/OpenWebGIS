@@ -42,8 +42,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 <h3><a href="/gis"><img src="imgopen/opengis.png" ></a>
 </h3>
 <br>
-26.10.2014
-<b>В связи с тем ,что  <a href="http://opengis.dlinkddns.com" target="_blank">OpenWebGIS</a> активно развивается, <br>то рассказывать обо всех новостях сразу в нескольких местах,<br> в том числе и на этой странице пока нет возможности поэтому<br> прошу знакомиться с новой информацией об OpenWebGIS по следующим адресам:</b><br>
+<b>Пожалуйста, знакомтесь с новой информацией об OpenWebGIS по следующим адресам:</b><br>
 <p align="justify">
 1. <a href="https://www.facebook.com/openwebgisPage" target="_blank">Facebook</a><br>
 2. <a href="https://plus.google.com/+openwebgis/posts" target="_blank">Google+</a><br>
@@ -52,113 +51,6 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 </p>
 <br>
 <br>
-11.08.2014
-<b>За последнее время в <a href="http://opengis.dlinkddns.com" target="_blank">OpenWebGIS</a> произошло много изменений, добавлено функций и модифицированы существующие.</b><br>
-<b>Ниже описаны некоторые из усовершенствований и добавлений.</b><br>
-<p align="justify">
-<br>
-Интерфейс <a href="http://opengis.dlinkddns.com" target="_blank">OpenWebGIS</a> может быть гибко настроен под потребности пользователя. После нажатия кнопки – ‘edit color’ Вы можете поменять цвет основных элементов интерфейса. После щелчка по пункту меню ‘Интерфейс->Переключить режим интерфейса’ Вы можете перемещать элементы интерфейса в любое удобное для вас место. Затем можно сохранить удобную для Вас конфигурацию интерфейса с помощью пункта меню ‘Интерфейс-> Сохранить интерфейс’, после этого при следующем сеансе работы с OpenWebGIS на вашем компьютере система сразу загрузиться в вашем (сохранённом) Интерфейсе. Вы можете в любой момент восстановить интерфейс по умолчанию с помощью пункта меню ‘Интерфейс->Стандартный интерфейс’
-</p>
-<p align="justify">
-Теперь вы можете создавать векторные слои в <a href="http://opengis.dlinkddns.com" target="_blank">OpenWebGIS</a> из файлов формата GPX.<br>
-Из GPX файла (если он имеет тип route(маршрут) и track(трек)) создаётся два слоя на карте: слой точек и линий.<br>
- После этого вы можете на карте редактировать трек (track,route) или путевые точки (waypoint) и экспортировать слои в новый GPX файл.<br>
-GPX (GPS eXchange Format) — это текстовый формат хранения и обмена данными GPS, основанный на XML.<br>
-GPX является свободным форматом и может быть использован без каких либо лицензионных отчислений.<br>
-Формат позволяет хранить информацию об ориентирах (waypoints), маршрутах (routes) и треках (tracklogs). <br>
-Для каждой точки хранятся её долгота, широта и высота над уровнем моря (если имеется информация о высоте).<br>
-Для точек трека хранится также время прохождения точки. Формат воспринимается многими программами, в том числе Google Earth и Ozi Explorer.<br>
-Трек для примера взят отсюда: <a href="http://www.gpsies.com/map.do?fileId=iyfkksscewrnoedn" target="_blank">http://www.gpsies.com/map.do?fileId=iyfkksscewrnoedn</a><br>
-<a href="news/OpenWebGISgpx1R.png" target="_blank"><img title="Пункты меню для работы с GPX файлами" width="400" height="300" src="news/OpenWebGISgpx1R.png" ></a>
-<a href="news/OpenWebGISgpxElevR.png" target="_blank"><img title="Изменение высоты маршрута (поле ele) в cлое созданном из GPX файла" width="400" height="300" src="news/OpenWebGISgpxElevR.png" ></a>
-<a href="news/OpenWebGISgpxTimeR.png" target="_blank"><img title="Анимация движения по маршруту GPX" width="400" height="300" src="news/OpenWebGISgpxTimeR.png" ></a>
-</p>
-<br>
-<br>
-08.06.2014
-<b>Видео построения изолиний(изотерм) с использованием <a href="http://opengis.dlinkddns.com" target="_blank">OpenWebGIS</a> на основе точечного слоя</b><br>
-<p align="justify">
-<iframe width="640" height="480" src="//www.youtube.com/embed/3bJqteBkcos" frameborder="0" allowfullscreen></iframe>
-<br>
-На этом видео показан пример построения изолиний(в данном случае изотерм) в онлайн ГИС (географической информационной системе) <a href="http://opengis.dlinkddns.com" target="_blank">OpenWebGIS</a><br>
-Входными данными являются данные температуры системы: The Integrated Global Ocean Services System (IGOSS).<br>
-Данные соответствуют среднемесячной температуре на поверхности земли за ноябрь 2013 г с привязкой к центрам одноградусных квадратов.<br>
-Пространственно данные ограничены по долготам от 17W до 64W, по широтам: от 2S до 27N.<br>
-Данные взяты в виде таблице формата CSV с сайта <a href="http://iridl.ldeo.columbia.edu/SOURCES/.IGOSS/.nmc/.Reyn_SmithOIv2/.monthly/.sst/dataselection.html?limit.X.value=17W+to+64W&limit.Y.value=2S+to+27N&limit.T.value=Nov+2013+to+Nov+2013" target="_blank">International Research Institute for Climate and Society</a><br>
-Столбец в таблице, содержащий температуру, назван SST(Sea Surface Temperature).
-В результате построения пользователь получает векторный слой (WFS) изотерм.
-</p>
-<br>
-07.06.2014
-<b>В <a href="http://opengis.dlinkddns.com" target="_blank">OpenWebGIS</a> добавлена возможность визуализации информации о погоде на карте </b><br>
-<p align="justify">
-Информацию о погоде можно выбрать из двух источников: <a href="http://www.worldweatheronline.com" target="_blank">http://www.worldweatheronline.com</a> и <a href="http://www.openweathermap.org/" target="_blank">http://www.openweathermap.org</a> <br>
-<a href="news/OpenWebGISWeather1R.png" target="_blank"><img src="news/OpenWebGISWeather1RS.png" ></a>
-<a href="news/OpenWebGISWeather2R.png" target="_blank"><img src="news/OpenWebGISWeather2RS.png" ></a><br>
-<a href="news/OpenWebGISWeather3R.png" target="_blank"><img src="news/OpenWebGISWeather3RS.png" ></a>
-</p>
-<br>
-07.06.2014
-<b>Добавлена в <a href="http://opengis.dlinkddns.com" target="_blank">OpenWebGIS</a> функция поиска (OpenStreetMap search) объектов на карте  </b><br>
-<p align="justify">
-Фукция поиска основана на инструменте <a href="http://wiki.openstreetmap.org/wiki/Nominatim" target="_blank"> Nominatim </a>(от латинского, 'по имени'). Это инструмент поиска данных OSM по имени и адресу. <br>
-Подробное описание можно посмотреть здесь: <a href="http://nominatim.openstreetmap.org" target="_blank">http://nominatim.openstreetmap.org</a><br>
-<a href="news/OpenWebGISSearchRR.png" target="_blank"><img src="news/OpenWebGISSearchRRS.png" ></a>
-</p>
-<br>
-17.05.2014
-<b>В <a href="http://opengis.dlinkddns.com" target="_blank">OpenWebGIS</a> добавлена функция расчёта маршрута.</b><br>
-<p align="justify">
-Построить маршрут вы сможете после нажатия кнопки с вопросительным знаком в правом верхнем углу карты.<br>
-Результат с подробной информацией по каждому участку можно экспортировать в kml,gml. Расчёт базируется на сервисе <a href="http://project-osrm.org" target="_blank">http://project-osrm.org</a><br>
-<a href="news/OpenWebGISrBig.png" target="_blank"><img src="news/OpenWebGISr.png" ></a>
-</p>
-<br>
-29.04.2014
-<b>Видео интерфейса <a href="http://opengis.dlinkddns.com" target="_blank">OpenWebGIS</a> </b><br>
-<p align="justify">
-<iframe width="640" height="360" src="//www.youtube.com/embed/0_E3L2uUNAY?feature=player_detailpage" frameborder="0" allowfullscreen></iframe>
-<br>
-На этом видео кратко показан интерфейс ГИС (географической информационной системы) системы <a href="http://opengis.dlinkddns.com" target="_blank">OpenWebGIS</a>  и результат работы одной из её функций под названием Time Line.<br>
-Вы видите анимацию перемещения <a href="http://ru.wikipedia.org/wiki/%CA%E0%F2%F0%E8%ED%E0_%28%F3%F0%E0%E3%E0%ED%29" target="_blank">урагана Катрина</a> в августе 2005 г. Данные взяты в виде файла csv с сайта http://cs.furman.edu/~pbatchelor/csc105/assignments/Mapping%20Labs/HurricanesBeerMoney.html. 
-Фото урагана со спутника взяты от сюда: www.tropicalweather.net,www.nola.com,discoverhistorictravel.com.<br>
-На видео показано перемещение урагана по дням (за каждые сутки дано 4 отметки местонахожения и скорости ветра -Wd_sp). Скорость вращения фото урагана изменяется в процентах от абсолютного максимума скорости. Пожалуйста, поддержите проект <a href="http://opengis.dlinkddns.com" target="_blank">OpenWebGIS</a> - открытую и свободную ГИС для всех нас.
-</p>
-<br>
-14.04.14
-<b>Новые возможности работы с растрами</b><br>
-<p align="justify">
-В Openwebgis появилась возможность загружать в рабочее пространство пользователя растровые файлы не только формата  <a href="http://gis-lab.info/qa/asciigrid.html" target="_blank">ArcGrid</a>, но и  <a href="http://ru.wikipedia.org/wiki/GeoTIFF" target="_blank">GeoTiff</a>. Это можно сделать, выбрав пункт меню 'Редактирование ->загрузить GeoTiff file'.
-<br>
-Расширены возможности работы с растрами в разделе геоматематики (пункт меню 'Вычисления->Геоматематика').<br>
-При выборе функции <a href="http://www.elbib.ru/content/journal/2011/201104/SK/SK.ru.html" target="_blank">WPS</a> (все функции в списке геоматематики работают по стандарту WPS ) для работы с растрами возможно выбрать в списке слоёв  растровый слой  (geotiff или arcGrid), 
-который уже загружен на сервер и с ним произвести все необходимые вычисления. Если у вас есть файл arcgrid хранящийся на вашем компьютере то с ним можно произвести те же операции без загрузки на сервер. 
-Для этого нужно только нажать кнопку выбрать файл. При этом содержимое файла должно появиться в поле Input:. После этого выберете необходимые параметры и нажмите кнопку Execute.
-<br>
-<a href="news/RasMaxRus.png"><img src="news/RasMinRus.png" ></a>
-
-</p>
-<br>
-29.12.13
-<b>Добавлен пункт меню - "Слои"->"Увеличить до слоя"</b><br>
-<p align="justify">
-Наконец-то добавлена функция увеличения и перемещения карты до слоя. Она доступна в пункте меню "Слои"->"Увеличить до слоя".
-При выборе этого пункта меню будет изменён экстент карты таким образом, что все элементы слоя, выбранного в списке 'Редактируемый слой',будут попадать в видимую Вам область карты.
-Хотелось бы подробнее остановиться на списке 'Редактируемый слой'. При работе с OpenWebGIS важно помнить, что для того, что бы добавлять, удалять, модифицировать элементы в слое или
-просматривать его атрибутивную таблицу и т.д.  НЕОБХОДИМО выбрать название соответсвующего слоя в списке 'Редактируемый слой'.
-</p>
-<br>
-22.12.13<br>
-<b>Началась разработка системы построения трехмерных графиков</b><br>
-<p align="justify">
-На данный момент Вы можете строить точечные трехмерные графики как на основе данных Ваших слоёв, так и на основе математических функций, например:
-z=x^2-y^2.<br>
-<a href="news/ChartBig.png"><img src="news/ChartMin.png" ></a>
-<a href="news/ChartBig2.png"><img src="news/ChartMin2.png" ></a><br>
-Поэксперементировать с этой функцией Вы можете если, после задания редактируемого слоя выберете пункты меню 'Редактирование'->'Открыть атрибутивную таблицу'. Затем необходимо задать все три оси в блоке 'Chart'.
-</p>
-<br>
-
 
 </body>
 </html>
