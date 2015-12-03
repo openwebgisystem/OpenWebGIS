@@ -2096,7 +2096,7 @@ for (var b=0; b<window.opener.edilayerMainLayer.features.length; b++)
 {sum.push(parseFloat(window.opener.edilayerMainLayer.features[b].attributes[meanField1]));
 ;}
 for (var b=0; b<window.opener.edilayerMainLayer.features.length; b++)
-{window.opener.edilayerMainLayer.features[b].attributes[rt]=Math.min.apply(0,sum);}
+{window.opener.edilayerMainLayer.features[b].attributes[rt]=Math.min.apply(0,sum);sum=[];}
 alert("All done. Reopen table");return;
 }
 
@@ -2108,7 +2108,7 @@ for (var b=0; b<window.opener.edilayerMainLayer.features.length; b++)
 {sum.push(parseFloat(window.opener.edilayerMainLayer.features[b].attributes[meanField2]));
 
 }}
-objMean[h]=Math.min.apply(0,sum);
+objMean[h]=Math.min.apply(0,sum);sum=[];
 }
 for (h in objMean)
 {
