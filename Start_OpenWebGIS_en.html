@@ -16416,10 +16416,6 @@ popupAggregNew = new OpenLayers.Popup.FramedCloud("AggregationPopup",
  null, true, onPopupClose);
  map.addPopup(popupAggregNew);
 }
-var AggregO = new Object();
-AggregO.Count=''; AggregO.Average=''; AggregO.Max='';AggregO.Median='';AggregO.Min=''; AggregO.StdDev=''; AggregO.Sum='';
-for (var aggrFunc in AggregO)
-{
 if (!document.getElementById('ChartOper_id'))
 {
 var fieldAggr=document.getElementById("aggreg_id").value;
@@ -16434,87 +16430,31 @@ FeaturesForStat[FeaturesForStat.length-1].attributes[fieldAggr]=parseFloat(edila
  }
 
 if(FeaturesForStat.length==0){alert("selected field is not numeric. The total number of elements in the layer:"+edilayerMainLayer.features.length); if(popupAggreg){popupAggreg.destroy();}return;}
-var format = new OpenLayers.Format.GeoJSON({});
-var jsonstring = format.write(FeaturesForStat);
+var mean1=0;var mean2=0; sumV1V2=0; squaredVal1=0;squaredVal2=0;var SumF=0; var MaxF=FeaturesForStat[0].attributes[fieldAggr];var MinF=FeaturesForStat[0].attributes[fieldAggr];
+for (var i=0;i<FeaturesForStat.length;i++)
+{mean1+=parseFloat(FeaturesForStat[i].attributes[fieldAggr]);
+sumV1V2+=parseFloat(FeaturesForStat[i].attributes[fieldAggr])*parseFloat(FeaturesForStat[i].attributes[fieldAggr]);
+squaredVal1+=parseFloat(FeaturesForStat[i].attributes[fieldAggr])*parseFloat(FeaturesForStat[i].attributes[fieldAggr]);
+SumF+=parseFloat(FeaturesForStat[i].attributes[fieldAggr]);
+if(MaxF<parseFloat(FeaturesForStat[i].attributes[fieldAggr])){MaxF=parseFloat(FeaturesForStat[i].attributes[fieldAggr]);}
+if(MinF>parseFloat(FeaturesForStat[i].attributes[fieldAggr])){MinF=parseFloat(FeaturesForStat[i].attributes[fieldAggr]);}
+}
+mean1=mean1/FeaturesForStat.length;
+sumV1V2=sumV1V2/FeaturesForStat.length;
+variance1=(squaredVal1/FeaturesForStat.length)-(mean1*mean1);
+var AverageF=SumF/FeaturesForStat.length; var Median='';
+try{FeaturesForStat.sort(function(a, b) {return a.attributes[fieldAggr] - b.attributes[fieldAggr]; });
+var length_ary = FeaturesForStat.length/2;
+	if (length_ary == Math.ceil(FeaturesForStat.length/2)) {
+		Median = (parseFloat(FeaturesForStat[length_ary-1].attributes[fieldAggr])+parseFloat(FeaturesForStat[length_ary].attributes[fieldAggr]))/2;
+	} else {
+		length_ary = Math.ceil(length_ary);
+		Median = FeaturesForStat[length_ary-1].attributes[fieldAggr];
+	}}
+catch(e){}
+document.getElementById('dataAggreg').value="Count="+FeaturesForStat.length+";\n"+"Average="+AverageF+";\n"+"Max="+MaxF+";\n"+"Min="+MinF+";\n"+"StandardDeviation="+Math.sqrt(variance1)+";\n"+"Variance="+variance1+";\n"+
+"Sum="+SumF+";\n"+"Median="+Median+";\n";
 
-
-strAggreg='<?xml version="1.0" encoding="UTF-8"?>'+
-'<wps:Execute version="1.0.0" service="WPS" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.opengis.net/wps/1.0.0" xmlns:wfs="http://www.opengis.net/wfs" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:gml="http://www.opengis.net/gml" xmlns:ogc="http://www.opengis.net/ogc" xmlns:wcs="http://www.opengis.net/wcs/1.1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 http://schemas.opengis.net/wps/1.0.0/wpsAll.xsd">'+
- '<ows:Identifier>gs:Aggregate</ows:Identifier>'+
- '<wps:DataInputs>'+
- '<wps:Input>'+
- ' <ows:Identifier>features</ows:Identifier>'+
- '<wps:Data>'+
- '<wps:ComplexData mimeType="application/json"><![CDATA['+jsonstring+']]></wps:ComplexData>'+
- '</wps:Data>'+
- '</wps:Input>'+
- '<wps:Input>'+
- '<ows:Identifier>aggregationAttribute</ows:Identifier>'+
- ' <wps:Data>'+
- ' <wps:LiteralData>'+fieldAggr+'</wps:LiteralData>'+
- ' </wps:Data>'+
- '</wps:Input>'+
- '<wps:Input>'+
- '<ows:Identifier>function</ows:Identifier>'+
- '<wps:Data>'+
- ' <wps:LiteralData>'+aggrFunc+'</wps:LiteralData>'+
- '</wps:Data>'+
- ' </wps:Input>'+
- '</wps:DataInputs>'+
- '<wps:ResponseForm>'+
- ' <wps:RawDataOutput mimeType="text/xml">'+
- ' <ows:Identifier>result</ows:Identifier>'+
- '</wps:RawDataOutput>'+
- '</wps:ResponseForm>'+
-'</wps:Execute>';
- alert("This function works only in online web version of OpenWebGIS")
-{return;}
-var request = OpenLayers.Request.POST({
- url: "/geoserver/wps",
- async: false,
- data: strAggreg,
- headers: {
- "Content-Type": "text/xml;charset=utf-8"
- },
- callback: function (response) {
- var gmlParser = new OpenLayers.Format.GML();
- var xmlSum_L = gmlParser.read(response.responseText);
-rtt=response.responseText;
-var strXml = response.text;
- var oXmlDoc = null;
-strXml = response.responseText;
- if ( window.DOMParser ) {
- var oXmlParser = new DOMParser();
- oXmlDoc = oXmlParser.parseFromString( strXml, "text/xml" );
- } else {
- oXmlDoc = new ActiveXObject( "Microsoft.XMLDOM" );
- oXmlDoc.async = "false";
- oXmlDoc.loadXML( strXml );
- }
-arrFeaturesAggreg = oXmlDoc; 
-arrFeaturesAggreg = oXmlDoc.getElementsByTagName('AggregationResults');
-var arrFeaturesAggreg2 = oXmlDoc.getElementsByTagName('AggregationResults');
-var arrFeaturesAggregName=arrFeaturesAggreg2[0].childNodes[0].nodeName;
-var arrFeaturesAggreg3 = oXmlDoc.getElementsByTagName('AggregationResults')[0].childNodes[0].textContent;
-finalData+=arrFeaturesAggregName+'='+arrFeaturesAggreg3+"; ";
-if (document.getElementById('ChartOper_id'))
-{
- var t=document.createElement('option');
-t.value=arrFeaturesAggreg3;
-t.text=arrFeaturesAggregName+'='+arrFeaturesAggreg3;
-document.getElementById("ChartOper_id").appendChild(t);
-popupChartS.autoSize=true;
-popupChartS.updateSize();
-}
-else
-{
-document.getElementById('dataAggreg').value=finalData;
-}
- },
- failure: function (response) {
- alert("Something went wrong in the request");
- }});
-}
  if (!document.getElementById('ChartOper_id'))
  {
  popupAggreg.destroy();
