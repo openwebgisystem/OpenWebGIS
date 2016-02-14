@@ -13011,19 +13011,31 @@ document.getElementById("id_divEditeLegMain").parentNode.removeChild(document.ge
 function Contact()
 {
 var bbox = document.getElementById("id_ContactsOpenGis").getBoundingClientRect();
- var body = document.body
- var docElem = document.documentElement
- var scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop
- var scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft
- var clientTop = docElem.clientTop || body.clientTop || 0
- var clientLeft = docElem.clientLeft || body.clientLeft || 0
- var topTop = bbox.top + scrollTop - clientTop
- var leftLeft = bbox.left + scrollLeft - clientLeft
+ var body = document.body; var docElem = document.documentElement; var scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop;
+ var scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft;
+ var clientTop = docElem.clientTop || body.clientTop || 0; var clientLeft = docElem.clientLeft || body.clientLeft || 0;
+ var topTop = bbox.top + scrollTop - clientTop; var leftLeft = bbox.left + scrollLeft - clientLeft;
 var DivEditeLeg=document.createElement("div");
 DivEditeLeg.id="id_divEditeLegMain";
 DivEditeLeg.innerHTML='<div id="id_divEditeLeg" style="background:#efe4b0; color:#0000ff;width:250px;z-index: 1400;height:180px;position:absolute;left:'+Math.round(leftLeft+50)+'px;top:'+Math.round(topTop+20)+
-'px;overflow:hidden; border: 1px solid black;"><img onclick="closeContact()" src="openlayers/theme/default/img/close.gif" style="position:relative; top:10px;float:right; cursor:pointer"><a style="position:relative; top:20px">openwebgis@yandex.ru</a><br><a style="position:relative; top:40px" href="https://www.facebook.com/openwebgisPage" target="_blank">facebook</a><br><a style="position:relative; top:40px" href="http://vk.com/openwebgis" target="_blank">vk.com</a></div>';
+'px;overflow:hidden; border: 1px solid black;"><img onclick="closeContact()" src="openlayers/theme/default/img/close.gif" style="position:relative; top:10px;float:right; cursor:pointer"><a style="position:relative; top:20px">openwebgisnew@gmail.com</a><br><a style="position:relative; top:20px">openwebgis@yandex.ru</a><br><a style="position:relative; top:40px" href="https://www.facebook.com/openwebgis" target="_blank">facebook</a><br><a style="position:relative; top:40px" href="http://vk.com/openwebgis" target="_blank">vk.com</a></div>';
 if(!document.getElementById("id_divEditeLeg"))
+{body.appendChild(DivEditeLeg); }
+}
+function closeAuthorsInfoOWG()
+{document.getElementById("id_divAuthorsMain").parentNode.removeChild(document.getElementById("id_divAuthorsMain"));}
+function AuthorsInfoOWG()
+{
+var bbox = document.getElementById("id_authorsOWG").getBoundingClientRect();
+ var body = document.body; var docElem = document.documentElement; var scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop;
+ var scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft;
+ var clientTop = docElem.clientTop || body.clientTop || 0; var clientLeft = docElem.clientLeft || body.clientLeft || 0;
+ var topTop = bbox.top + scrollTop - clientTop; var leftLeft = bbox.left + scrollLeft - clientLeft;
+var DivEditeLeg=document.createElement("div");
+DivEditeLeg.id="id_divAuthorsMain";
+DivEditeLeg.innerHTML='<div id="id_divAuthorsLeg" style="background:#efe4b0; color:#0000ff;width:250px;z-index: 1400;height:180px;position:absolute;left:'+Math.round(leftLeft+50)+'px;top:'+Math.round(topTop+20)+
+'px;overflow:hidden; border: 1px solid black;"><img onclick="closeAuthorsInfoOWG()" src="openlayers/theme/default/img/close.gif" style="position:relative; top:10px;float:right; cursor:pointer"><a style="position:relative; top:20px">Fedor Kolomeyko</a><br><a style="position:relative; top:20px">openwebgisnew@gmail.com</a><br><a style="position:relative; top:20px">openwebgis@yandex.ru</a><br><a style="position:relative; top:40px" href="https://www.facebook.com/openwebgis" target="_blank">facebook</a><br><a style="position:relative; top:40px" href="http://openwebgisystem.blogspot.com" target="_blank">Blog</a></div>';
+if(!document.getElementById("id_divAuthorsMain"))
 {body.appendChild(DivEditeLeg); }
 }
 function Help()
@@ -21075,8 +21087,7 @@ function Update3Dmap(widget)
 //widget.scene.primitives.destroy();
 if(typeof CesiumDisplay!=="undefined")
 {CesiumDisplay.destroy();CesiumDisplay=undefined;}
-for(var i=0;i<primitive3D.length;i++)
-{widget.scene.primitives.remove(primitive3D[i]);}
+widget.scene.primitives.removeAll();
 for(var i=0;i<wmsArray3d.length;i++)
 {widget.scene.imageryLayers.remove(wmsArray3d[i]);}
 primitive3D=[];  var img1=[];var img2=[];wmsArray3d=[];
@@ -21145,7 +21156,18 @@ var splitBh=imageHeight/30;
 if(primit.length!==0){var indexn=primit.length-1} else{var indexn=0};index=[]
 for(i=0;i<imageWidth;i+=splitBw){
       for(j=0;j<imageHeight;j+=splitBh){if(primit.length!==0){indexn++;index.push(indexn)}else{index.push(indexn);}
-     rectangle2=primit.add(new Cesium.RectanglePrimitive({}))
+       if(i==0&&j==0)
+{var ext1 = new OpenLayers.Pixel(i+splitBw, j);
+var ext2 = new OpenLayers.Pixel(i, j+splitBh);}//left,bottom}
+else
+{var ext1 = new OpenLayers.Pixel(i+splitBw, j);var ext2 = new OpenLayers.Pixel(i, j+splitBh);}
+var lonlat1 = map.getLonLatFromPixel(ext1);var lonlat2 = map.getLonLatFromPixel(ext2);
+var boundImage=new OpenLayers.Bounds(lonlat2.lon, lonlat2.lat, lonlat1.lon, lonlat1.lat);boundImage.transform(map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
+     var primInstan=new Cesium.GeometryInstance({geometry : new Cesium.RectangleGeometry({rectangle :Cesium.Rectangle.fromDegrees(boundImage.left, boundImage.bottom,boundImage.right, boundImage.top) })});
+var prim0=new Cesium.Primitive({ geometryInstances : primInstan, appearance : new Cesium.MaterialAppearance({  translucent: true  }) });
+    prim0.rectangleOWG=new Cesium.Rectangle.fromDegrees(boundImage.left, boundImage.bottom,boundImage.right, boundImage.top);   
+      
+     rectangle2=primit.add(prim0)
      primitive3D.push(rectangle2);
       
       }
@@ -21213,22 +21235,12 @@ for(i=0;i<imageWidth;i+=splitBw){
             var ImageData = ctx0.getImageData(i,j,splitBw,splitBh);     
 var sndCanvas=document.createElement("canvas");
  sndCanvas.width=splitBw;  sndCanvas.height=splitBh;
-if(i==0&&j==0)
-{var ext1 = new OpenLayers.Pixel(i+splitBw, j);
-var ext2 = new OpenLayers.Pixel(i, j+splitBh);}//left,bottom}
-else
-{var ext1 = new OpenLayers.Pixel(i+splitBw, j);var ext2 = new OpenLayers.Pixel(i, j+splitBh);}
-//rtt=ext2;alert("1");rtt=ext1;alert("2");
-var lonlat1 = map.getLonLatFromPixel(ext1);var lonlat2 = map.getLonLatFromPixel(ext2);
-var boundImage=new OpenLayers.Bounds(lonlat2.lon, lonlat2.lat, lonlat1.lon, lonlat1.lat);
-            var ctx2 = sndCanvas.getContext("2d");            ctx2.putImageData(ImageData,0,0);
-ImageData=sndCanvas.toDataURL();boundImage.transform(map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
- //var alphaImg=parseFloat(0.999);if(map.layers[a].opacity===null) {alphaImg=parseFloat(0.999);;}else{alphaImg=parseFloat(map.layers[a].opacity);}
-//alert(alphaImg);
+          var ctx2 = sndCanvas.getContext("2d");            ctx2.putImageData(ImageData,0,0);
+ImageData=sndCanvas.toDataURL();
 var pr=primit.get(index[ind2]);ind2++;
-pr.rectangle=Cesium.Rectangle.fromDegrees(boundImage.left, boundImage.bottom,boundImage.right, boundImage.top);
-pr.material=new Cesium.Material({translucent:true,        fabric : {type : 'Image', uniforms : {image : ImageData }         }     })
-//primitive3D.push(rectangle2);
+pr.appearance.material=new Cesium.Material({translucent:true,fabric : {  type : 'Image',  uniforms : {image : ImageData  }     }     });
+
+
           }
     }
 }}(a,is2,index);
@@ -21483,15 +21495,14 @@ var boundImage=new OpenLayers.Bounds(lonlat2.lon, lonlat2.lat, lonlat1.lon, lonl
             ctx2.putImageData(ImageData,0,0);
 ImageData=sndCanvas.toDataURL();//rtt=ImageData;alert("stop");
 boundImage.transform(map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
-//rtt=boundImage;alert("stop2");
-var prim0=new Cesium.RectanglePrimitive({
-        rectangle : Cesium.Rectangle.fromDegrees(boundImage.left, boundImage.bottom,boundImage.right, boundImage.top),
-   material : new Cesium.Material({
-translucent:true,
-        fabric : {  type : 'Image',  uniforms : {image : ImageData  }
-        }     })
-    })
-  rectangle2 =primit.add(prim0);primit.raise(prim0);primitive3D.push(rectangle2);
+var primInstan=new Cesium.GeometryInstance({
+  geometry : new Cesium.RectangleGeometry({rectangle : Cesium.Rectangle.fromDegrees(boundImage.left, boundImage.bottom,boundImage.right, boundImage.top) })
+});
+var prim0=new Cesium.Primitive({ geometryInstances : primInstan, 
+appearance : new Cesium.MaterialAppearance({      translucent: true       }) });
+prim0.appearance.material=new Cesium.Material({translucent:true,fabric : {  type : 'Image',  uniforms : {image : ImageData  }     }     });
+prim0.rectangleOWG=new Cesium.Rectangle.fromDegrees(boundImage.left, boundImage.bottom,boundImage.right, boundImage.top);
+ rectangle2 =primit.add(prim0);primit.raise(prim0);primitive3D.push(rectangle2);
            //tiles.push([ImageData,boundImage]);  
       }
     }
@@ -21501,7 +21512,7 @@ translucent:true,
 }
 
 var bound=map.calculateBounds();bound.transform(map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
-  widget.scene.camera.viewRectangle(Cesium.Rectangle.fromDegrees(bound.left, bound.bottom, bound.right, bound.top));
+  widget.scene.camera.setView({destination:Cesium.Rectangle.fromDegrees(bound.left, bound.bottom, bound.right, bound.top)});
   globalwidg3dowg=widget;
 //var layers = widget.scene.imageryLayers;
 
@@ -21517,11 +21528,11 @@ if(document.getElementById("BaseLayer_id3d"). value=='Bing Maps Road')
 {  baseLayer3d=new Cesium.BingMapsImageryProvider({
  url: 'http://dev.virtualearth.net',mapStyle: Cesium.BingMapsStyle.ROAD})}
 if(document.getElementById("BaseLayer_id3d"). value=='OpenStreetMaps')
-{ baseLayer3d=new Cesium.OpenStreetMapImageryProvider({url : 'http://a.tile.openstreetmap.org/'});}
+{ baseLayer3d=new Cesium.createOpenStreetMapImageryProvider({url : 'http://a.tile.openstreetmap.org/'});}
 if(document.getElementById("BaseLayer_id3d"). value=='MapQuest OpenStreetMaps')
-{ baseLayer3d= new Cesium.OpenStreetMapImageryProvider({ url: 'http://otile1-s.mqcdn.com/tiles/1.0.0/osm/'})}
+{ baseLayer3d= new Cesium.createOpenStreetMapImageryProvider({ url: 'http://otile1-s.mqcdn.com/tiles/1.0.0/osm/'})}
 if(document.getElementById("BaseLayer_id3d"). value=='Stamen Maps')
-{ baseLayer3d=new Cesium.OpenStreetMapImageryProvider({url: 'http://stamen-tiles.a.ssl.fastly.net/watercolor/',
+{ baseLayer3d=new Cesium.createOpenStreetMapImageryProvider({url: 'http://stamen-tiles.a.ssl.fastly.net/watercolor/',
                 fileExtension: 'jpg',credit: 'Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under CC BY SA.'})}
 if(document.getElementById("BaseLayer_id3d"). value=='Natural Earth II (local)')
 { baseLayer3d= new Cesium.TileMapServiceImageryProvider({url : '3d/Source/Assets/Textures/NaturalEarthII'     })}
@@ -21574,13 +21585,13 @@ function change2_5D(widget)
 if(document.getElementById("id_change2_5D_a").innerHTML=="_2.5D")
 {document.getElementById("id_change2_5D_a").innerHTML="_3D";widget.scene.morphToColumbusView(); 
   setTimeout(function(){var bound=map.calculateBounds();bound.transform(map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
-widget.scene.camera.viewRectangle(Cesium.Rectangle.fromDegrees(bound.left, bound.bottom, bound.right, bound.top));
+widget.scene.camera.setView({destination:Cesium.Rectangle.fromDegrees(bound.left, bound.bottom, bound.right, bound.top)});
 widget.scene.camera.direction=new Cesium.Cartesian3(0,0.7071067811865476,-0.7071067811865476); },3000);}
 
 else{document.getElementById("id_change2_5D_a").innerHTML="_2.5D"; widget.scene.morphTo3D();
 
   setTimeout(function(){var bound=map.calculateBounds();bound.transform(map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
-  widget.scene.camera.viewRectangle(Cesium.Rectangle.fromDegrees(bound.left, bound.bottom, bound.right, bound.top));},3000);
+  widget.scene.camera.setView({destination:Cesium.Rectangle.fromDegrees(bound.left, bound.bottom, bound.right, bound.top)});},3000);
 }
 //widget.scene.SceneMode=Cesium.SceneMode.COLUMBUS_VIEW;
 }
@@ -21819,7 +21830,7 @@ document.getElementById("id_div3dMapMain2").appendChild(cesiumContainer);
 
 
 var widget = new Cesium.CesiumWidget(cesiumContainer, {
-    imageryProvider : new Cesium.OpenStreetMapImageryProvider({url : 'http://a.tile.openstreetmap.org/'}),
+    imageryProvider : new Cesium.createOpenStreetMapImageryProvider({url : 'http://a.tile.openstreetmap.org/'}),
     /*terrainProvider : new Cesium.CesiumTerrainProvider({
         url : '//assets.agi.com/stk-terrain/world',  credit : 'Terrain data courtesy Analytical Graphics, Inc.'    }),*/
     // Use high-res stars downloaded from https://github.com/AnalyticalGraphicsInc/cesium-assets
@@ -21868,13 +21879,13 @@ wmsArray3d.push(wms3dsav);
 } }
 for (h in obj3dl)
 {obj3dl[h]["5"]=obj3dl[h]["5"].replace(/\s/g,"+");
-var prim0=new Cesium.RectanglePrimitive({
-        rectangle : Cesium.Rectangle.fromDegrees(obj3dl[h]["1"], obj3dl[h]["2"],obj3dl[h]["3"], obj3dl[h]["4"]),
-   material : new Cesium.Material({
-translucent:true,
-        fabric : {  type : 'Image',  uniforms : {image : obj3dl[h]["5"]  }
-        }     })
-    })
+  var primInstan=new Cesium.GeometryInstance({
+  geometry : new Cesium.RectangleGeometry({rectangle : Cesium.Rectangle.fromDegrees(obj3dl[h]["1"], obj3dl[h]["2"],obj3dl[h]["3"], obj3dl[h]["4"]) })
+});
+var prim0=new Cesium.Primitive({ geometryInstances : primInstan, 
+appearance : new Cesium.MaterialAppearance({            }) });
+prim0.appearance.material=new Cesium.Material({translucent:true,fabric : {  type : 'Image',  uniforms : {image : obj3dl[h]["5"]  }     }     })
+prim0.rectangleOWG=new Cesium.Rectangle.fromDegrees(obj3dl[h]["1"], obj3dl[h]["2"],obj3dl[h]["3"], obj3dl[h]["4"]);
 var nprimit=primit.add(prim0);primit.raise(prim0);
 primitive3D.push(nprimit);
 }
@@ -21997,7 +22008,7 @@ cesiumContainer.style.zIndex = 3000;
 document.getElementById("id_div3dMapMain2").appendChild(cesiumContainer);
 
 var widget = new Cesium.CesiumWidget(cesiumContainer, {
-    imageryProvider : new Cesium.OpenStreetMapImageryProvider({url : 'http://a.tile.openstreetmap.org/'}),
+    imageryProvider : new Cesium.createOpenStreetMapImageryProvider({url : 'http://a.tile.openstreetmap.org/'}),
     /*terrainProvider : new Cesium.CesiumTerrainProvider({
         url : '//assets.agi.com/stk-terrain/world',  credit : 'Terrain data courtesy Analytical Graphics, Inc.'    }),*/
     // Use high-res stars downloaded from https://github.com/AnalyticalGraphicsInc/cesium-assets
@@ -22090,7 +22101,18 @@ var splitBh=imageHeight/30;
 if(primit.length!==0){var indexn=primit.length-1} else{var indexn=0};index=[]
 for(i=0;i<imageWidth;i+=splitBw){
       for(j=0;j<imageHeight;j+=splitBh){if(primit.length!==0){indexn++;index.push(indexn)}else{index.push(indexn);}
-     rectangle2=primit.add(new Cesium.RectanglePrimitive({}))
+    if(i==0&&j==0)
+{var ext1 = new OpenLayers.Pixel(i+splitBw, j);
+var ext2 = new OpenLayers.Pixel(i, j+splitBh);}//left,bottom}
+else
+{var ext1 = new OpenLayers.Pixel(i+splitBw, j);var ext2 = new OpenLayers.Pixel(i, j+splitBh);}
+var lonlat1 = map.getLonLatFromPixel(ext1);var lonlat2 = map.getLonLatFromPixel(ext2);
+var boundImage=new OpenLayers.Bounds(lonlat2.lon, lonlat2.lat, lonlat1.lon, lonlat1.lat);boundImage.transform(map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
+     var primInstan=new Cesium.GeometryInstance({geometry : new Cesium.RectangleGeometry({rectangle :Cesium.Rectangle.fromDegrees(boundImage.left, boundImage.bottom,boundImage.right, boundImage.top) })});
+var prim0=new Cesium.Primitive({ geometryInstances : primInstan, appearance : new Cesium.MaterialAppearance({  translucent: true  }) });
+    prim0.rectangleOWG=new Cesium.Rectangle.fromDegrees(boundImage.left, boundImage.bottom,boundImage.right, boundImage.top);   
+      
+     rectangle2=primit.add(prim0)
      primitive3D.push(rectangle2);
       
       }
@@ -22158,21 +22180,10 @@ for(i=0;i<imageWidth;i+=splitBw){
             var ImageData = ctx0.getImageData(i,j,splitBw,splitBh);     
 var sndCanvas=document.createElement("canvas");
  sndCanvas.width=splitBw;  sndCanvas.height=splitBh;
-if(i==0&&j==0)
-{var ext1 = new OpenLayers.Pixel(i+splitBw, j);
-var ext2 = new OpenLayers.Pixel(i, j+splitBh);}//left,bottom}
-else
-{var ext1 = new OpenLayers.Pixel(i+splitBw, j);var ext2 = new OpenLayers.Pixel(i, j+splitBh);}
-//rtt=ext2;alert("1");rtt=ext1;alert("2");
-var lonlat1 = map.getLonLatFromPixel(ext1);var lonlat2 = map.getLonLatFromPixel(ext2);
-var boundImage=new OpenLayers.Bounds(lonlat2.lon, lonlat2.lat, lonlat1.lon, lonlat1.lat);
             var ctx2 = sndCanvas.getContext("2d");            ctx2.putImageData(ImageData,0,0);
-ImageData=sndCanvas.toDataURL();boundImage.transform(map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
- //var alphaImg=parseFloat(0.999);if(map.layers[a].opacity===null) {alphaImg=parseFloat(0.999);;}else{alphaImg=parseFloat(map.layers[a].opacity);}
-//alert(alphaImg);
+ImageData=sndCanvas.toDataURL();
 var pr=primit.get(index[ind2]);ind2++;
-pr.rectangle=Cesium.Rectangle.fromDegrees(boundImage.left, boundImage.bottom,boundImage.right, boundImage.top);
-pr.material=new Cesium.Material({translucent:true,        fabric : {type : 'Image', uniforms : {image : ImageData }         }     })
+pr.appearance.material=new Cesium.Material({translucent:true,fabric : {  type : 'Image',  uniforms : {image : ImageData  }     }     });
           }
     }
 }}(a,is2,index);
@@ -22427,16 +22438,15 @@ var boundImage=new OpenLayers.Bounds(lonlat2.lon, lonlat2.lat, lonlat1.lon, lonl
             ctx2.putImageData(ImageData,0,0);
 ImageData=sndCanvas.toDataURL();//rtt=ImageData;alert("stop");
 boundImage.transform(map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
-//rtt=boundImage;alert("stop2");
-var prim0=new Cesium.RectanglePrimitive({
-        rectangle : Cesium.Rectangle.fromDegrees(boundImage.left, boundImage.bottom,boundImage.right, boundImage.top),
-   material : new Cesium.Material({
-translucent:true,
-        fabric : {  type : 'Image',  uniforms : {image : ImageData  }
-        }     })
-    })
-  rectangle2 =primit.add(prim0);primit.raise(prim0);primitive3D.push(rectangle2);
-           //tiles.push([ImageData,boundImage]);  
+var primInstan=new Cesium.GeometryInstance({
+  geometry : new Cesium.RectangleGeometry({rectangle : Cesium.Rectangle.fromDegrees(boundImage.left, boundImage.bottom,boundImage.right, boundImage.top) })
+});
+var prim0=new Cesium.Primitive({ geometryInstances : primInstan, appearance : new Cesium.MaterialAppearance({  translucent: true         }) });
+prim0.appearance.material=new Cesium.Material({translucent:true,fabric : {  type : 'Image',  uniforms : {image : ImageData }, components : { 
+  }    }     });
+prim0.rectangleOWG=new Cesium.Rectangle.fromDegrees(boundImage.left, boundImage.bottom,boundImage.right, boundImage.top);
+rectangle2 =primit.add(prim0);
+primit.raise(prim0);primitive3D.push(rectangle2);
       }
     }
     }////canvas
@@ -22449,7 +22459,7 @@ cesiumContainer.childNodes[0].style.border="1px solid black";
 cesiumContainer.childNodes[0].style.width=parseInt(document.getElementById("id_3dOpenWebWidth").value)+"px";cesiumContainer.childNodes[0].style.height=parseInt(document.getElementById("id_3dOpenWebWidth").value)+"px";
 cesiumContainer.childNodes[0].childNodes[0].clientWidth=parseInt(document.getElementById("id_3dOpenWebWidth").value);cesiumContainer.childNodes[0].childNodes[0].clientHeight=parseInt(document.getElementById("id_3dOpenWebHeight").value);
 if(document.getElementById("id_zoom3dCurrent").checked==true){var bound=map.calculateBounds();bound.transform(map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
-  widget.scene.camera.viewRectangle(Cesium.Rectangle.fromDegrees(bound.left, bound.bottom, bound.right, bound.top));
+  widget.scene.camera.setView({destination:Cesium.Rectangle.fromDegrees(bound.left, bound.bottom, bound.right, bound.top)});
 }
 if(document.getElementById("id_div3dMapMain0")){close3dFirstWin()} 
 document.getElementById("id_3dJSON").onchange=function (){onchangeid_3dJSON();}
@@ -23368,8 +23378,8 @@ var posDiv=document.getElementById("id_div3dMapMain2").style.left+";"+document.g
 var str3dowg=document.getElementById(map.layerContainerDiv.id+"3d").childNodes[0].style.width+";"+document.getElementById(map.layerContainerDiv.id+"3d").childNodes[0].style.height+";"+document.getElementById(map.layerContainerDiv.id+"3d").style.left+";"+document.getElementById(map.layerContainerDiv.id+"3d").style.top;
 var sel3dbase=document.getElementById("BaseLayer_id3d").value;
 for (var wd=0;wd<globalwidg3dowg.scene.primitives.length;wd++)
-{var tpr=wd+"layerimg"; var tb=globalwidg3dowg.scene.primitives.get(wd).rectangle;
-if(tb){objprimitiv[tpr]={"1":((tb.west*180)/Math.PI),"2":((tb.south*180)/Math.PI),"3":((tb.east*180)/Math.PI),"4":((tb.north*180)/Math.PI),"5":globalwidg3dowg.scene.primitives.get(wd).material._template.uniforms.image}}
+{var tpr=wd+"layerimg"; var tb=globalwidg3dowg.scene.primitives.get(wd).rectangleOWG;
+if(tb){objprimitiv[tpr]={"1":((tb.west*180)/Math.PI),"2":((tb.south*180)/Math.PI),"3":((tb.east*180)/Math.PI),"4":((tb.north*180)/Math.PI),"5":globalwidg3dowg.scene.primitives.get(wd).appearance.material.uniforms.image}}
 }
 var posCam=globalwidg3dowg.scene.camera.position.x+";"+globalwidg3dowg.scene.camera.position.y+";"+globalwidg3dowg.scene.camera.position.z+";"+globalwidg3dowg.scene.camera.direction.x+";"+globalwidg3dowg.scene.camera.direction.y+";"+globalwidg3dowg.scene.camera.direction.z+";"+globalwidg3dowg.scene.camera.right.x+";"+globalwidg3dowg.scene.camera.right.y+";"+globalwidg3dowg.scene.camera.right.z+";"+globalwidg3dowg.scene.camera.up.x+";"+globalwidg3dowg.scene.camera.up.y+";"+globalwidg3dowg.scene.camera.up.z+";"+posDiv;
 if(globalwidg3dEntity!==0)
@@ -24345,7 +24355,7 @@ Item separation symbol must be the semicolon or comma" class="podpunkt" onMouseO
 <div class="punkt" onMouseOver="overPunkt(this);" onMouseOut="outPunkt(this);"><div>About</div
 ><div class="list_punkts"><div class="kont">
 <a href="#" onclick="Help();"><div class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>OpenWebGIS help</div></div></a>
-<a href="#"><div class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Authors</div></div></a>
+<a href="#"><div class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div id="id_authorsOWG" onclick="AuthorsInfoOWG();">Authors</div></div></a>
 <a href="#" onclick="aboutSoftware();"><div class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div >OpenWebGIS structure</div></div></a>
 <!--<a href="#" onclick="Login();"><div class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Login</div></div></a>-->
 <a href="#" onclick="Game();"><div class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Game</div></div></a>
