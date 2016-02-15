@@ -402,7 +402,7 @@ float:left;
  </style> 
 
  <script src="openlayers/OpenLayersRU.js"></script>
- <script src="http://maps.google.com/maps/api/js?v=3.9&amp;sensor=false"></script>
+ <script src="http://maps.google.com/maps/api/js?v=3.22"></script>
  <script type="text/javascript" src="3d/Build/Cesium/Cesium.js"></script>
  <script>
  Cesium.BingMapsApi.defaultKey='AmLI8x4K57fDpPvI7qo1JoG4fjH3V9hjkosVs5BjNeihMpLkyUWTNssTndbIZb3S';
@@ -1364,7 +1364,7 @@ var osment=0;var osmcount=0;if(layerOSM.visibility==true)
 } if(osment==osmcount){/*alert("may be internet error")*/
 for(var mb=0;mb<map.layers.length;mb++){if(map.layers[mb].name=='Countries_base'&&map.layers[mb].isBaseLayer==true){map.setBaseLayer(map.layers[mb]);;}}
 } }
-
+var removeFin=document.getElementById("tableAlertWait");if(removeFin){document.getElementById("tableAlertWait").parentNode.removeChild(removeFin);}
 
 });
 wfs_cur.events.register("loadstart",wfs_cur, function() {WaitWindow();});
