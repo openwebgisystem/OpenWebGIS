@@ -11594,8 +11594,10 @@ NewArcGridLayer3();
  }
 function NewArcGridLayerMinMax(Arcgcont)
 {
-var novalue=Arcgcont.split('NODATA_VALUE ')[1].split(/\s/)[0];
-var dopstrn='NODATA_VALUE '+novalue+'\n';var arrayvalue=Arcgcont.split(dopstrn)[1].split(/\s/); 
+var novalue=Arcgcont.split(/NODATA_VALUE /i)[1].split(/\s/)[0];  
+var dopstrn='NODATA_VALUE '+novalue+'\n';
+var dopstrn = new RegExp(dopstrn, 'i');
+var arrayvalue=Arcgcont.split(dopstrn)[1].split(/\s/); 
 var indnoval=0
 for(var v=0;v<arrayvalue.length;v++){if(arrayvalue[v]!=novalue){var minDistC = parseFloat(arrayvalue[v]);indnoval=v;break;}}
 var  maxDistC = parseFloat(minDistC) ;
@@ -11614,11 +11616,13 @@ var inputmax=this.document.createElement('input');inputmax.type='text';inputmax.
 function NewArcGridLayer3()
 {
 var Arcgcont=document.getElementById("IdminGRD_val_1").ArcgInf;
-
- var col=parseInt(Arcgcont.split('NCOLS ')[1].split(/\s/)[0]);var row=Arcgcont.split('NROWS ')[1].split(/\s/)[0];var lonx=parseFloat(Arcgcont.split('XLLCORNER ')[1].split(/\s/)[0]);var laty=parseFloat(Arcgcont.split('YLLCORNER ')[1].split(/\s/)[0]);
-var novalue=Arcgcont.split('NODATA_VALUE ')[1].split(/\s/)[0];
+var col=parseInt(Arcgcont.split(/NCOLS /i)[1].split(/\s/)[0]);
+ var row=parseFloat(Arcgcont.split(/NROWS /i)[1].split(/\s/)[0]);
+ var lonx=parseFloat(Arcgcont.split(/XLLCORNER /i)[1].split(/\s/)[0]);
+ var laty=parseFloat(Arcgcont.split(/YLLCORNER /i)[1].split(/\s/)[0]);
+var novalue=Arcgcont.split(/NODATA_VALUE /i)[1].split(/\s/)[0];
 var lotatxy=new OpenLayers.LonLat(lonx,laty).transform(new OpenLayers.Projection("EPSG:4326"),map.getProjectionObject())
-var s=map.getPixelFromLonLat(lotatxy); var dopstrn='NODATA_VALUE '+novalue+'\n';
+var s=map.getPixelFromLonLat(lotatxy); var dopstrn='NODATA_VALUE '+novalue+'\n';var dopstrn = new RegExp(dopstrn, 'i');
 var arrayvalue=Arcgcont.split(dopstrn)[1].split(/\s{1,}/); 
  var strcolor1='';
  var brushCanvasF = document.createElement('canvas');
@@ -20622,6 +20626,7 @@ DivEditeLeg.innerHTML='<div id="id_id_div3dWebGisLeg0" style="background:#ffffff
 if(!document.getElementById("id_div3dMapMain0"))
 {body.appendChild(DivEditeLeg);
 document.getElementById("id_3dJSON").onchange=function (){onchangeid_3dJSON();}
+document.getElementById("id_div3dMapMain0").onmousedown=function(event){drags(event)};document.getElementById("id_div3dMapMain0").onmouseup=function(e){enddrag()};
  }
 },
 displayClass: "olControl3dFeatures"
