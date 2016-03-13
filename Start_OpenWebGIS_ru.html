@@ -724,7 +724,11 @@ AlertWait2.style.zIndex="10000";
 AlertWait2.style.display="none";
 document.getElementById("map").appendChild(AlertWait2);
 if(localStorage["bodyColor2"])
-{document.body.style.backgroundColor=localStorage["bodyColor2"];
+{
+if(localStorage["changeMenubrYes"])
+{if(localStorage["changeMenubrYes"]=='changeMenubrYes'){changeMenu();}}
+if(localStorage["NewInterface"]=="yes"){changeMenu();;Change_InterfaceNew();}
+document.body.style.backgroundColor=localStorage["bodyColor2"];
 document.getElementById("map").style.width=localStorage["mapWidth2"];
 document.getElementById("map").style.height=localStorage["mapHeight2"];
 document.getElementById("mapResize").style.left=localStorage["mapLeft2"];
@@ -747,9 +751,7 @@ document.getElementById("OpenStreetMapIdSearch").style.left=localStorage["OpenSt
 document.getElementById("OpenStreetMapIdSearch").style.top=localStorage["OpenStreetMapIdSearchTop"];
 document.getElementById("OpenWikipediaSearch").style.left=localStorage["OpenWikipediaSearchLeft"];
 document.getElementById("OpenWikipediaSearch").style.top=localStorage["OpenWikipediaSearchTop"];
-if(localStorage["changeMenubrYes"])
-{if(localStorage["changeMenubrYes"]=='changeMenubrYes'){changeMenu();}}
-if(localStorage["NewInterface"]=="yes"){if(localStorage["changeMenubrYes"]=='changeMenubrYes'){changeMenu();};Change_InterfaceNew();}
+
 }
 var simpl='1';
 var inter='3';
