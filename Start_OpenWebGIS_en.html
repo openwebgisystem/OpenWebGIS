@@ -76,7 +76,31 @@ border-color:#ddd #333 #333 #ddd;border-style:solid;border-width:1px;
 box-shadow: inset rgba(0,0,0,.6) 0 -1px 3px, inset rgba(252,255,255,.7) 0 3px 3px, rgba(0,0,0,.8) 0 3px 3px -1px;
 border-radius: 15px;
 }
+.NewInterfaceclass {
+height:30px;
+border-color:#50F078 #9bb838 #9bb838 #50F078;
+border-style:solid;border-width:1px;background:#50F078;
+position:relative;top:-130px;left:800px;cursor:pointer;
+box-shadow: inset rgba(0,0,0,.6) 0 -1px 3px, inset rgba(252,255,255,.7) 0 3px 3px, rgba(0,0,0,.8) 0 3px 3px -1px;
+border-radius: 15px;
+}
 
+.NewInterfaceclass:hover {
+border-color:#FFCC66 #FFFF99 #FFFF99 #FFCC66;
+border-style:solid;border-width:1px;background:#FFFF99;
+box-shadow: inset rgba(0,0,0,.6) 0 -1px 3px, inset rgba(252,255,255,.7) 0 3px 3px, rgba(0,0,0,.8) 0 3px 3px -1px;
+border-radius: 15px;
+}
+.NewInterfaceclass:focus {
+background:#ddd;border-color:#ddd #333 #333 #ddd;border-style:solid;border-width:1px;
+box-shadow: inset rgba(0,0,0,.6) 0 -1px 3px, inset rgba(252,255,255,.7) 0 3px 3px, rgba(0,0,0,.8) 0 3px 3px -1px;
+border-radius: 15px;
+}
+.NewInterfaceclass:active {background:#ff0000;
+border-color:#ddd #333 #333 #ddd;border-style:solid;border-width:1px;
+box-shadow: inset rgba(0,0,0,.6) 0 -1px 3px, inset rgba(252,255,255,.7) 0 3px 3px, rgba(0,0,0,.8) 0 3px 3px -1px;
+border-radius: 15px;
+}
 .SearchHclass {
 height:15px;
 border-color:#50F078 #9bb838 #9bb838 #50F078;
@@ -706,6 +730,7 @@ document.getElementById("OpenWikipediaSearch").style.left=localStorage["OpenWiki
 document.getElementById("OpenWikipediaSearch").style.top=localStorage["OpenWikipediaSearchTop"];
 if(localStorage["changeMenubrYes"])
 {if(localStorage["changeMenubrYes"]=='changeMenubrYes'){changeMenu();}}
+if(localStorage["NewInterface"]=="yes"){if(localStorage["changeMenubrYes"]=='changeMenubrYes'){changeMenu();};Change_InterfaceNew();}
 }
 else
 {
@@ -20807,7 +20832,7 @@ for(var i=1;i<tablen.childNodes[0].childNodes.length;i++)
 {
 for(var j=0;j<tablen.childNodes[0].childNodes[i].cells.length;j++)
 {
-tablen.childNodes[0].childNodes[i].cells[j].innerHTML='<textarea style="height:20px; width:100px" id="" type="text" size="10" value='+'"'+tablen.childNodes[0].childNodes[i].cells[j].innerHTML+'"'+'>'+tablen.childNodes[0].childNodes[i].cells[j].innerHTML+'</textarea><div title="add image or video" onclick="addtableimage(this)" style="float:right; cursor:pointer;width: 20px; height: 15px;background:#0000ff"></div>';
+tablen.childNodes[0].childNodes[i].cells[j].innerHTML='<textarea style="height:20px; width:100px" id="" type="text" size="10" >'+tablen.childNodes[0].childNodes[i].cells[j].innerHTML+'</textarea><div title="add image or video" onclick="addtableimage(this)" style="float:right; cursor:pointer;width: 20px; height: 15px;background:#0000ff"></div>';
 } }
 }
 function UpdateAttsaveNewDiv(butn,tablen)
@@ -20948,7 +20973,7 @@ DivEditeLeg.innerHTML='<div id="id_divTableImageLeg" style="background:#ffffff; 
 '<a>Select image file:</a><br>'+
 '<input title="Select image file from your computer" type="file" id="file_idImageTable"><input type="checkbox" id="id_imageTableUpload" value="checkbox"/>Upload image to OpenWebGIS'+'<br>'+
 'Or insert URL of image:<textarea id="id_imageTableTextArea" style="width: 250px; height: 20px;font-size:11px"></textarea><br>'+
-'Or insert URL of Video:<textarea id="id_VideoTableTextArea" value="" style="width: 250px; height: 20px;font-size:11px"></textarea><br>'+
+'Or insert URL of Video or website:<textarea id="id_VideoTableTextArea" value="" style="width: 250px; height: 20px;font-size:11px"></textarea><br>'+
 '<a>width:</a><input type="text" size="5" id="id_imageTableWidth" value="50"/><br>'+
 '<a>height:</a><input type="text" size="5" id="id_imageTableHeight" value="50"/><br>'+
 '<input type="checkbox" id="id_imageTableorSize"  onchange="" value="checkbox"/>Leave original size<br>'+
@@ -21042,7 +21067,7 @@ selectedFeatureWebGis=temSelFeature;
 for (var i in edilayerMainLayer.features[j].attributes)
 {
 var varid=i+"_"+y+"_"+edilayerMainLayer.features[j].id;
-htmlText+='<td height="20px" style="font-size: 60%; font-family: sans-serif;color: #082567"><textarea style="height:20px; width:100px" id="'+varid+'" type="text" size="10" value='+'"'+edilayerMainLayer.features[j].attributes[i]+'"'+'>'+edilayerMainLayer.features[j].attributes[i]+'</textarea><div title="add image or video" onclick="addtableimage(this)" style="float:right; cursor:pointer;width: 20px; height: 15px;background:#0000ff"></div></td>';
+htmlText+='<td height="20px" style="font-size: 60%; font-family: sans-serif;color: #082567"><textarea style="height:20px; width:100px" id="'+varid+'" type="text" size="10" >'+edilayerMainLayer.features[j].attributes[i]+'</textarea><div title="add image or video" onclick="addtableimage(this)" style="float:right; cursor:pointer;width: 20px; height: 15px;background:#0000ff"></div></td>';
 }
 htmlText+='</tr>';
  y++; }
@@ -23079,6 +23104,121 @@ var graticuleCtl3;
 graticuleCtl2=graticuleCtl3;
 }
 }
+function Change_InterfaceNew()
+{document.getElementById("mapResize").style.top="-12px";
+document.getElementById("mapResize").style.left="-11px";
+document.getElementById("map").style.left="0px";
+document.getElementById("map").style.top="0px";
+document.getElementById("map").style.width=document.body.clientWidth;
+document.getElementById("map").style.height=document.body.clientHeight;
+if(map){map.updateSize();}else{ setTimeout(function(){map.updateSize()}, 2500)}
+document.getElementById("dragEditLayer").style.top=document.body.clientHeight-80;
+document.getElementById("dragEditLayer").style.left=0;
+document.getElementById("dragScale").style.display="none";
+document.getElementById("dragCoord").style.top=document.body.clientHeight-100;
+document.getElementById("dragCoord").style.left=0;
+document.getElementById("inf_contacts_id").style.top=document.body.clientHeight-100;
+document.getElementById("inf_contacts_id").style.left=250;
+document.getElementById("inf_contacts_id").style.zIndex=3000;
+var imgLogo=document.createElement("img");
+imgLogo.src="imgopen/opengis.png";
+imgLogo.width=150;imgLogo.height=75;
+imgLogo.style.position="absolute";imgLogo.id="imageNewInLogo";
+imgLogo.style.left=450;imgLogo.style.top=document.body.clientHeight-100;imgLogo.style.zIndex=3000;imgLogo.style.opacity="0.6";
+if(!document.getElementById("imageNewInLogo")){document.body.appendChild(imgLogo);}
+
+var newLayerDiv=document.createElement('div');
+newLayerDiv.id="InterNewLayList";newLayerDiv.style.height="25px";newLayerDiv.style.textAlign="center";newLayerDiv.innerHTML="Layers List";newLayerDiv.style.transitionDuration="0.5s";newLayerDiv.style.WebkitTransitionDuration="0.5s";newLayerDiv.style.color='rgb(132,132,132)';
+if(document.body.clientWidth<1550){newLayerDiv.style.top="30px"}else{newLayerDiv.style.top="0px";}newLayerDiv.style.left="90px";newLayerDiv.style.zIndex="9000";newLayerDiv.style.cursor="pointer";newLayerDiv.style.border="1px solid black";newLayerDiv.style.position="absolute";
+var bbox = document.getElementById("external_control2").getBoundingClientRect();;
+var layL=document.getElementById("drag");var addv=bbox.height+25;layL.style.top="-"+addv;
+layL.style.left="60px";layL.style.transitionDuration="0.5s"
+newLayerDiv.style.backgroundColor="rgba(219,221,214,0.8)";newLayerDiv.style.borderRadius = '8px'; newLayerDiv.style.WebkitBorderRadius = '8px'; 
+if(!document.getElementById("InterNewLayList")){document.body.appendChild(newLayerDiv);}
+newLayerDiv.onclick = function()
+{var bbox = document.getElementById("external_control2").getBoundingClientRect();var layL=document.getElementById("drag");var addv=bbox.height+25;
+
+if(document.body.clientWidth<1550)
+{if(layL.style.top=="30px"||layL.style.top=="30"||layL.style.top==30){newLayerDiv.style.left="90px"; layL.style.top="-"+addv; }
+else{newLayerDiv.style.left="90px";layL.style.top="30px";} }
+else
+{if(layL.style.top=="0px"||layL.style.top=="0"||layL.style.top==0){newLayerDiv.style.left="90px"; layL.style.top="-"+addv; }
+else{newLayerDiv.style.left="90px";layL.style.top="0px";} }}
+newLayerDiv.onmouseover=function(){newLayerDiv.style.color='rgb(0,0,255)';}
+newLayerDiv.onmouseout=function(){newLayerDiv.style.color='rgb(132,132,132)';}
+
+
+
+var newLayerDivM=document.createElement('div');changeMenu();
+newLayerDivM.id="InterNewMainMenu";newLayerDivM.style.height="25px";newLayerDivM.style.textAlign="center";newLayerDivM.innerHTML="Main Menu";newLayerDivM.style.transitionDuration="0.5s";newLayerDivM.style.WebkitTransitionDuration="0.5s";newLayerDivM.style.color='rgb(132,132,132)';
+
+if(document.body.clientWidth<1550){newLayerDivM.style.top="30px"}else{newLayerDivM.style.top="0px";}
+newLayerDivM.style.left="350px";newLayerDivM.style.zIndex="9000";newLayerDivM.style.cursor="pointer";newLayerDivM.style.border="1px solid black";newLayerDivM.style.position="absolute";
+
+var bbox = document.getElementById("id_menu").getBoundingClientRect();document.getElementById("id_menu").style.backgroundColor="rgba(152,225,114,0.7)"
+var layL=document.getElementById("dragMenu");var addv=bbox.height+20;layL.style.top="-"+addv;
+layL.style.left="270px";layL.style.transitionDuration="0.5s"
+newLayerDivM.style.backgroundColor="rgba(219,221,214,0.8)";newLayerDivM.style.borderRadius = '8px'; newLayerDivM.style.WebkitBorderRadius = '8px'; 
+if(!document.getElementById("InterNewMainMenu")){document.body.appendChild(newLayerDivM);}
+newLayerDivM.onclick = function()
+{var bbox = document.getElementById("id_menu").getBoundingClientRect();var layL=document.getElementById("dragMenu");var addv=bbox.height+20;
+if(document.body.clientWidth<1550)
+{if(layL.style.top=="30px"||layL.style.top=="30"||layL.style.top==30){newLayerDivM.style.left="350px"; layL.style.top="-"+addv; }
+else{newLayerDivM.style.left="350px";layL.style.top="30px";} }
+else
+{if(layL.style.top=="0px"||layL.style.top=="0"||layL.style.top==0){newLayerDivM.style.left="350px"; layL.style.top="-"+addv; }
+else{newLayerDivM.style.left="350px";layL.style.top="0px";}} }
+newLayerDivM.onmouseover=function(){newLayerDivM.style.color='rgb(0,0,255)';}
+newLayerDivM.onmouseout=function(){newLayerDivM.style.color='rgb(132,132,132)';}
+
+var newSearchODiv=document.createElement('div');
+ newSearchODiv.id="InterNewSearchO"; newSearchODiv.style.height="25px";  newSearchODiv.style.textAlign="center"; newSearchODiv.innerHTML="OpenStreetMap_Search:"; newSearchODiv.style.transitionDuration="0.5s"; newSearchODiv.style.WebkitTransitionDuration="0.5s";newSearchODiv.style.color='rgb(132,132,132)';
+
+if(document.body.clientWidth<1550){newSearchODiv.style.top="30px"}else{newSearchODiv.style.top="0px";}
+newSearchODiv.style.left="530px"; newSearchODiv.style.zIndex="9000"; newSearchODiv.style.cursor="pointer"; newSearchODiv.style.border="1px solid black"; newSearchODiv.style.position="absolute";
+var bbox = document.getElementById("OpenStreetMapIdSearch").getBoundingClientRect();
+var layL=document.getElementById("OpenStreetMapIdSearch");var addv=bbox.height;layL.style.top="-"+addv;
+layL.style.left="450px";layL.style.transitionDuration="0.5s"
+ newSearchODiv.style.backgroundColor="rgba(219,221,214,0.8)"; newSearchODiv.style.borderRadius = '8px';  newSearchODiv.style.WebkitBorderRadius = '8px'; 
+if(!document.getElementById("InterNewSearchO")){document.body.appendChild( newSearchODiv);}
+ newSearchODiv.onclick = function()
+{var bbox = document.getElementById("OpenStreetMapIdSearch").getBoundingClientRect();var layL=document.getElementById("OpenStreetMapIdSearch");var addv=bbox.height;
+if(document.body.clientWidth<1550)
+{
+if(layL.style.top=="55px"||layL.style.top=="55"||layL.style.top==55){newSearchODiv.style.left="530px"; layL.style.top="-"+addv; }
+else{newSearchODiv.style.left="450px";layL.style.top="55px";} }
+else
+{
+if(layL.style.top=="25px"||layL.style.top=="25"||layL.style.top==25){ newSearchODiv.style.left="530px"; layL.style.top="-"+addv; }
+else{ newSearchODiv.style.left="450px";layL.style.top="25px";} }
+
+}
+newSearchODiv.onmouseover=function(){newSearchODiv.style.color='rgb(0,0,255)';}
+newSearchODiv.onmouseout=function(){newSearchODiv.style.color='rgb(132,132,132)';}
+
+var  newSearchWDiv=document.createElement('div');
+  newSearchWDiv.id="InterNewSearchW";  newSearchWDiv.style.height="25px";   newSearchWDiv.style.textAlign="center";  newSearchWDiv.innerHTML="OpenStreetMap_Search:";  newSearchWDiv.style.transitionDuration="0.5s";  newSearchWDiv.style.WebkitTransitionDuration="0.5s";newSearchWDiv.style.color='rgb(132,132,132)';
+if(document.body.clientWidth<1550){newSearchWDiv.style.top="30px"}else{newSearchWDiv.style.top="0px";} 
+newSearchWDiv.style.left="800px";  newSearchWDiv.style.zIndex="9000";  newSearchWDiv.style.cursor="pointer";  newSearchWDiv.style.border="1px solid black";  newSearchWDiv.style.position="absolute";
+var bbox = document.getElementById("OpenWikipediaSearch").getBoundingClientRect();
+var layL=document.getElementById("OpenWikipediaSearch");var addv=bbox.height;layL.style.top="-"+addv;
+layL.style.left="700px";layL.style.transitionDuration="0.5s"
+  newSearchWDiv.style.backgroundColor="rgba(219,221,214,0.8)";  newSearchWDiv.style.borderRadius = '5px';   newSearchWDiv.style.WebkitBorderRadius = '5px'; 
+if(!document.getElementById("InterNewSearchW")){document.body.appendChild(  newSearchWDiv);}
+  newSearchWDiv.onclick = function()
+{var bbox = document.getElementById("OpenWikipediaSearch").getBoundingClientRect();var layL=document.getElementById("OpenWikipediaSearch");var addv=bbox.height;
+if(document.body.clientWidth<1550)
+{
+if(layL.style.top=="95px"||layL.style.top=="95"||layL.style.top==95){newSearchWDiv.style.left="800px"; layL.style.top="-"+addv; }
+else{newSearchWDiv.style.left="700px";layL.style.top="95px";} }
+else{
+if(layL.style.top=="65px"||layL.style.top=="65"||layL.style.top==65){  newSearchWDiv.style.left="800px"; layL.style.top="-"+addv; }
+else{  newSearchWDiv.style.left="700px";layL.style.top="65px";} }}
+newSearchWDiv.onmouseover=function(){newSearchWDiv.style.color='rgb(0,0,255)';}
+newSearchWDiv.onmouseout=function(){newSearchWDiv.style.color='rgb(132,132,132)';}
+
+
+}
 function SetDefaultInterface()
 {
 document.body.style.backgroundColor="rgb(153, 217, 234)";
@@ -23107,6 +23247,13 @@ document.getElementById("OpenWikipediaSearch").style.left="977px";
 var r=document.getElementById("id_block_menu"); 
 if(r&&r.childNodes[0].id&&r.childNodes[0].id=="changeMenubr_"+0)
 {changeMenu();}
+if(document.getElementById('InterNewLayList')){document.getElementById('InterNewLayList').parentNode.removeChild(document.getElementById('InterNewLayList'));}
+if(document.getElementById('InterNewMainMenu')){document.getElementById('InterNewMainMenu').parentNode.removeChild(document.getElementById('InterNewMainMenu'));}
+if(document.getElementById('InterNewSearchO')){document.getElementById('InterNewSearchO').parentNode.removeChild(document.getElementById('InterNewSearchO'));}
+if(document.getElementById('InterNewSearchW')){document.getElementById('InterNewSearchW').parentNode.removeChild(document.getElementById('InterNewSearchW'));}
+if(document.getElementById('imageNewInLogo')){document.getElementById('imageNewInLogo').parentNode.removeChild(document.getElementById('imageNewInLogo'));}
+map.updateSize();
+document.getElementById("inf_contacts_id").style.top="70px";document.getElementById("inf_contacts_id").style.left="210px";
 }
 function SaveInterface()
 {
@@ -23137,6 +23284,8 @@ var r=document.getElementById("id_block_menu");
 if(r&&r.childNodes[0].id&&r.childNodes[0].id=="changeMenubr_"+0)
 {localStorage["changeMenubrYes"]='changeMenubrYes';}
 else{localStorage["changeMenubrYes"]='changeMenubrNo';}
+if(document.getElementById('InterNewLayList')){localStorage["NewInterface"]="yes";}else{localStorage["NewInterface"]="no";}
+alert("Saved");
 
 }
 function SaveProject2()
@@ -23300,6 +23449,7 @@ if(document.getElementById("id_LinkSaveInterface")&&document.getElementById("id_
 {
 var r=document.getElementById("id_block_menu"); var changeMenubr='cMenubrNo';
 if(r.childNodes[0].id&&r.childNodes[0].id=="changeMenubr_"+0){changeMenubr='cMenubrYes';}
+if(document.getElementById('InterNewLayList')){var NewInterface="NewInter_yes";}else{var NewInterface="NewInter_no";}
 DataProjectWebGis+=" InterfaceSave "+";"+document.body.style.backgroundColor+";"+document.getElementById("map").style.width+";"+document.getElementById("map").style.height+";"+
 document.getElementById("mapResize").style.left+";"+document.getElementById("mapResize").style.top+";"+document.getElementById("external_control2").style.backgroundColor+";"+
 document.getElementById("drag").style.top+";"+document.getElementById("drag").style.left+";"+document.getElementById("dragMenu").style.top+";"+
@@ -23307,7 +23457,7 @@ document.getElementById("dragMenu").style.left+";"+document.getElementById("id_m
 document.getElementById("dragEditLayer").style.left+";"+document.getElementById("dragCoord").style.top+";"+document.getElementById("dragCoord").style.left+";"+
 document.getElementById("dragScale").style.top+";"+document.getElementById("dragScale").style.left+";"+document.getElementById("dragToolbar_opt").style.top+";"+
 document.getElementById("dragToolbar_opt").style.left+";"+document.getElementById("OpenStreetMapIdSearch").style.left+";"+document.getElementById("OpenStreetMapIdSearch").style.top+";"+
-document.getElementById("OpenWikipediaSearch").style.left+";"+document.getElementById("OpenWikipediaSearch").style.top+";"+changeMenubr+";"+" InterfaceSaveEnd ";
+document.getElementById("OpenWikipediaSearch").style.left+";"+document.getElementById("OpenWikipediaSearch").style.top+";"+changeMenubr+";"+NewInterface+";"+" InterfaceSaveEnd ";
 var divSeparateL=document.getElementsByTagName("div");var divSeparateLS='';
 for(var sd=0;sd<divSeparateL.length;sd++)
 {if(divSeparateL[sd].id=='id_divSepTableImage')
@@ -23813,6 +23963,7 @@ if(loadfree==true)
 if(localStorageOpenWebGIS.split(" InterfaceSave ")[1])
 {var strsaveinter=localStorageOpenWebGIS.split(" InterfaceSave ;")[1].split(" InterfaceSaveEnd ")[0];
 var newstrsaveinter=strsaveinter.split(";");
+if(newstrsaveinter[24]&&newstrsaveinter[24]=="NewInter_yes"){Change_InterfaceNew();}
 document.body.style.backgroundColor=newstrsaveinter[0];document.getElementById("map").style.width=newstrsaveinter[1];
 document.getElementById("map").style.height=newstrsaveinter[2];document.getElementById("mapResize").style.left=newstrsaveinter[3];
 document.getElementById("mapResize").style.top=newstrsaveinter[4];document.getElementById("external_control2").style.backgroundColor=newstrsaveinter[5];
@@ -23824,7 +23975,8 @@ document.getElementById("dragCoord").style.left=newstrsaveinter[14];document.get
 document.getElementById("dragScale").style.left=newstrsaveinter[16];document.getElementById("dragToolbar_opt").style.top=newstrsaveinter[17];
 document.getElementById("dragToolbar_opt").style.left=newstrsaveinter[18];document.getElementById("OpenStreetMapIdSearch").style.left=newstrsaveinter[19];
 document.getElementById("OpenStreetMapIdSearch").style.top=newstrsaveinter[20];document.getElementById("OpenWikipediaSearch").style.left=newstrsaveinter[21];
-document.getElementById("OpenWikipediaSearch").style.top=newstrsaveinter[22]; var changeMenuv=newstrsaveinter[23]; if(changeMenuv=='cMenubrYes'){changeMenu();}
+document.getElementById("OpenWikipediaSearch").style.top=newstrsaveinter[22]; var changeMenuv=newstrsaveinter[23]; if(changeMenuv=='cMenubrYes'){changeMenu();if(newstrsaveinter[24]&&newstrsaveinter[24]=="NewInter_yes"){changeMenu();}}else{if(newstrsaveinter[24]&&newstrsaveinter[24]=="NewInter_yes"){changeMenu();}}
+
 }
 if(localStorageOpenWebGIS.split(" InterfSepDSaveStart ")[1])
 {
@@ -24222,6 +24374,7 @@ function colorEdit(obj){ colorWin= open("color.htm", "Edit Color interface",
 <div onclick="Login()" style="position:relative;left:380px;top:-80px;bottom:50px;width:50px; height:20px;background:#082567; cursor:pointer">Login</div></div>
  <div id="colorMain" style="position:relative;top:-90px;left:180px" align="left"> <img id="colorColorMain" title="edit color background page" src="img/color.png" onclick="colorEdit(this)" > </div>
 <input id="buttonWeather_id" type="button" value="Weather" class="Weathclass" onclick="Weather_Layer()"/>
+<input id="buttonNewInterface_id" type="button" value="New Interface" class="NewInterfaceclass" onclick="Change_InterfaceNew()"/>
 <!--<input type="button" value="Donate" class="Donclass" onclick="Donate()"/>-->
 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" class="DonPclass">
 <input type="hidden" name="cmd" value="_s-xclick">
@@ -24233,7 +24386,7 @@ function colorEdit(obj){ colorWin= open("color.htm", "Edit Color interface",
 
 
 </div>
-<div style="position:absolute;top:70px;left:210px;cursor:pointer;width:170px">
+<div id="inf_contacts_id" style="position:absolute;top:70px;left:210px;cursor:pointer;width:170px">
 <a href="https://plus.google.com/112343419546545616455/posts" target="_blank"><img src="img/g.png" ></a>
 <a href="https://www.facebook.com/openwebgisPage" target="_blank"><img src="img/f.png" ></a>
 <a href="http://vk.com/openwebgis" target="_blank"><img src="img/vk.png" ></a>
