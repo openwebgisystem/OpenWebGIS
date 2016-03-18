@@ -3222,6 +3222,147 @@ popup_new_fileJSON = new OpenLayers.Popup.FramedCloud("NewFilePopupJSON",
 document.getElementById('file_idJSON').addEventListener('change', readSingleFileGML, false);
 
 }
+function GBIFMapdatabase()
+{
+var bbox = document.getElementById("map").getBoundingClientRect(); var body = document.body; var docElem = document.documentElement;
+ var scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop; var scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft;
+ var clientTop = docElem.clientTop || body.clientTop || 0; var clientLeft = docElem.clientLeft || body.clientLeft || 0;
+ var topTop = bbox.top + scrollTop - clientTop; var leftLeft = bbox.left + scrollLeft - clientLeft;
+var DivEditeLeg=document.createElement("div");
+DivEditeLeg.id="id_GBIFMapMain2";
+DivEditeLeg.className="id_divRoutLegMain";
+DivEditeLeg.style.position="relative";
+DivEditeLeg.innerHTML='<div id="id_divGBIFLeg" style="background:#ffffff; color:#0000ff;z-index: 6000;position:absolute;left:'+Math.round(leftLeft+50)+'px;top:'+Math.round(topTop-150)+
+'px;overflow:hidden; border: 1px solid black;"><img onclick="closeGBIFDBWin()" src="openlayers/theme/default/img/close.gif" style="position:relative; top:10px;float:right; cursor:pointer"><a style="position:relative; top:20px"></a>'+
+'<a style="font-size: 9px;"> you can move this window if you select menu item Interface/switch to interface drag</a><br>'+
+'<a>Information provided by:</a><br> <a href="http://www.gbif.org/what-is-gbif" target="_blank">The Global Biodiversity Information Facility (GBIF)</a><br>'+
+'<a>Insert Name:</a><br>'+
+'scientific name:<textarea title="" type="text" size="45" id="id_GBIFnameAtl2" value="" style="height:20px; width:200px"></textarea><br>'+
+/*'<input title="coordinate of the lower left corner.You can click on the map or type manually. Coordinates are inserted after clicking on the map if this value is equal to zero or empty" type="text" size="8" id="first_longOSM" value="0"/>lower left longitude, you can click on the map<br>'+
+'<input title="coordinate of the lower left corner" type="text" size="8" id="first_latOSM" value="0"/>lower left latitude<br>'+
+'<input title="coordinate of the upper-right corner.You can click on the map or type manually. Coordinates are inserted after clicking on the map if this value is equal to zero or empty" type="text" size="8" id="sec_longOSM" value="0"/>upper right longitude<br>'+'<input title="coordinate of the upper-right corner" type="text" size="8" id="sec_latOSM" value="0"/>upper right latitude<br>'+*/
+'<a>limit:</a><input type="text" size="10" id="id_limitGBIFLayer" title="Insert limit" value="50"/><br>'+
+'<input type="checkbox" id="id_checkCoordGBIF" title="" value="checkbox"/><a style="font-size: 12px;">Analyse rectangle region</a><br>'+
+'<a>Geographic Region:</a><br>'+
+'<input title="coordinate of the lower left corner.You can click on the map or type manually. Coordinates are inserted after clicking on the map if this value is equal to zero or empty" type="text" size="8" id="first_longGBIF" value="0"/>lower left longitude, you can click on the map<br>'+
+'<input title="coordinate of the lower left corner" type="text" size="8" id="first_latGBIF" value="0"/>lower left latitude<br>'+
+'<input title="coordinate of the upper-right corner.You can click on the map or type manually. Coordinates are inserted after clicking on the map if this value is equal to zero or empty" type="text" size="8" id="sec_longGBIF" value="0"/>upper right longitude<br>'+'<input title="coordinate of the upper-right corner" type="text" size="8" id="sec_latGBIF" value="0"/>upper right latitude<br>'+
+'<a>insert name of Layer:</a><input type="text" size="35" id="id_textGBIFLayer" title="Insert name of layer" value="GBIF_DB"/><br>'+
+'<input type="checkbox" id="Id_GBIFlinkWikim" value="checkbox"/>add link of wikimedia.org to attributes or<br>'+
+'<input type="checkbox" id="Id_GBIFlinkWiki" value="checkbox"/>add link of wikipedia to attributes<br>'+
+'<input type="checkbox" id="Id_GBIFlinkImage" checked value="checkbox"/>add images'+
+'<p> <button type=button onclick=GBIFMapdatabase2()>OK</button></p><div id="waitGBIFDB"></div>'+
+'<div id="id_GBIFtypetags2" ; style="overflow: auto;height: 150px;display:none; border: 1px #000;"></div>'+
+'</div>';
+if(!document.getElementById("id_GBIFMapMain2"))
+{body.appendChild(DivEditeLeg); 
+OpenLayers.Control.Click = OpenLayers.Class(OpenLayers.Control, {                
+defaultHandlerOptions: {'single': true,'double': false,'pixelTolerance': 0,'stopSingle': false,'stopDouble': false},
+initialize: function(options) {this.handlerOptions = OpenLayers.Util.extend({}, this.defaultHandlerOptions);OpenLayers.Control.prototype.initialize.apply(this, arguments); 
+this.handler = new OpenLayers.Handler.Click(this, {'click': this.trigger}, this.handlerOptions);}, 
+trigger: function(e) {var lonlat = map.getLonLatFromPixel(e.xy);
+var new_pos=new OpenLayers.LonLat(lonlat.lon,lonlat.lat).transform(
+map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
+if(document.getElementById("first_longGBIF"))
+{if(document.getElementById("first_longGBIF").value==''||document.getElementById("first_longGBIF").value=='0')
+{document.getElementById("first_longGBIF").value=new_pos.lon;
+document.getElementById("first_latGBIF").value=new_pos.lat;}
+else{
+if(document.getElementById("sec_longGBIF").value==''||document.getElementById("sec_longGBIF").value=='0')
+{document.getElementById("sec_longGBIF").value=new_pos.lon;
+document.getElementById("sec_latGBIF").value=new_pos.lat;}}
+}  }
+});
+var clickGBIFDBCoordinates = new OpenLayers.Control.Click();
+clickGBIFDBCoordinates.title="Download this bounding box from the GBIF database";
+ map.addControl(clickGBIFDBCoordinates);
+clickGBIFDBCoordinates.activate();
+document.getElementById("id_GBIFMapMain2").onmousedown=function(event){drags(event)};
+document.getElementById("id_GBIFMapMain2").onmouseup=function(e){enddrag()};}
+}
+function GBIFMapdatabase2()
+{
+var waitosm=document.createElement('a');waitosm.id="id_waitGBIF2";waitosm.innerHTML="Wait...";document.getElementById("waitGBIFDB").appendChild(waitosm);waitosm.style.fontSize="15px";
+myUrl=document.getElementById("id_GBIFnameAtl2").value; var limit=document.getElementById("id_limitGBIFLayer").value;
+var l1=document.getElementById("first_longGBIF").value;var lat1=document.getElementById("first_latGBIF").value;var l2=document.getElementById("sec_longGBIF").value;var lat2=document.getElementById("sec_latGBIF").value;
+var latf='';var lats='';var lonf='';var lons='';
+if(document.getElementById("id_checkCoordGBIF").checked==true){latf=lat1;lats=lat2; lonf=l1;lons=l2}
+myUrl=encodeURIComponent(myUrl); var strand='';var myUrl2='scientificName='+myUrl;
+if(document.getElementById("id_GBIFnameAtl2").value==''){myUrl2='';}else{strand='&';}
+if(document.getElementById("Id_GBIFlinkWikim").checked==true&&document.getElementById("Id_GBIFlinkWiki").checked==true)
+{alert("select only wikimedia or only wikipedia link"); if(document.getElementById("id_waitGBIF2")){document.getElementById("id_waitGBIF2").parentNode.removeChild(document.getElementById("id_waitGBIF2"))}return;}
+try {var xmlhttp =new XMLHttpRequest();}
+catch (e) {alert("error");}
+//xmlhttp.open('GET','/glob_biodiv.php?n='+myUrl+'&limit='+limit+"&latf="+latf+"&lats="+lats+"&lonf="+lonf+"&lons="+lons+'&rand='+Math.random(), true);
+if(document.getElementById("id_checkCoordGBIF").checked==false)
+{xmlhttp.open('GET','http://api.gbif.org/v1/occurrence/search?'+myUrl2+strand+'limit='+limit, true);}
+else
+{if(latf==''||lats==''||lonf==''||lons==''){alert("Please, insert coordinates");return;}
+xmlhttp.open('GET','http://api.gbif.org/v1/occurrence/search?'+myUrl2+strand+'decimalLatitude='+latf+","+lats+"&decimalLongitude="+lonf+","+lons+'&limit='+limit, true);
+}
+
+
+xmlhttp.setRequestHeader("Cache-Control", "no-cache");
+xmlhttp.setRequestHeader("Content-type", "text/xml");
+xmlhttp.onreadystatechange = function()
+{if(xmlhttp.readyState == 4&&xmlhttp.status == 200) {
+if(xmlhttp==''){alert('no data');return;}
+var err=xmlhttp.responseText.indexOf("cURL Error:");
+if(err!=-1){alert("No data or time out. Please try again");if(document.getElementById("id_waitGBIF2")){document.getElementById("id_waitGBIF2").parentNode.removeChild(document.getElementById("id_waitGBIF2"))}return;}
+try {var arrPointj=JSON.parse(xmlhttp.responseText);rtt=arrPointj;if (arrPointj.results.length==0){alert("no data");}
+var arrfirst_point=[];
+var obj = {};
+   for(var g=0; g<arrPointj.results.length; g++) {
+for(h in arrPointj.results[g]){var str=h;
+obj[str] = true; }
+  }
+for(var bb=0;bb<arrPointj.results.length;bb++)
+{ 
+var new_pos2=new OpenLayers.LonLat(arrPointj.results[bb].decimalLongitude,arrPointj.results[bb].decimalLatitude).transform(
+new OpenLayers.Projection("EPSG:4326"),
+map.getProjectionObject());
+var point=new OpenLayers.Geometry.Point(new_pos2.lon, new_pos2.lat)
+var first_point= new OpenLayers.Feature.Vector(point);
+///////////////
+var NewAttr={};for(h in obj)
+{ for (ag in arrPointj.results[bb]) 
+{if(h==ag) {NewAttr[h]=arrPointj.results[bb][ag]; 
+if(h=='media'&&document.getElementById("Id_GBIFlinkImage").checked==true){
+var img1='';var imgn='';if(NewAttr[h][0]&&NewAttr[h][0].identifier){img1='<a href="'+NewAttr[h][0].identifier+'" target="_blank"><img onclick="" src="'+NewAttr[h][0].identifier+'" title="foto creator: '+NewAttr[h][0].creator+'" height="100" width="200"></a><br>'}else{if(NewAttr[h][0]&&NewAttr[h][0].references){img1='<a href="'+NewAttr[h][0].references+'" target="_blank">'+'foto1'+'</a><br>';}}
+for (var y=1;y<NewAttr[h].length;y++){var linkg='';if(NewAttr[h][y].identifier){linkg=NewAttr[h][y].identifier};if(NewAttr[h][y].references){linkg=NewAttr[h][y].references}
+var yi=y+1;imgn+='<a href="'+linkg+'" target="_blank">'+'foto'+yi+' '+'</a>';}NewAttr[h]=img1+imgn;}
+if(document.getElementById("Id_GBIFlinkWikim").checked==true||document.getElementById("Id_GBIFlinkWiki").checked==true)
+{if(document.getElementById("Id_GBIFlinkWikim").checked==true){if(h=="species"||h=='kingdom'||h=='phylum'||h=='order'||h=='family'||h=='genus')
+{NewAttr[h]='<a href="https://species.wikimedia.org/wiki/'+NewAttr[h]+'" target="_blank">'+NewAttr[h]+'</a>'}}
+if(document.getElementById("Id_GBIFlinkWiki").checked==true){if(h=="species"||h=='kingdom'||h=='phylum'||h=='order'||h=='family'||h=='genus')
+{NewAttr[h]='<a href="https://en.wikipedia.org/wiki/'+NewAttr[h]+'" target="_blank">'+NewAttr[h]+"</a>"}}
+} }
+else{if(NewAttr[h]){}else{NewAttr[h]=''};} ;  
+}     }
+/////////////////////
+first_point.attributes=NewAttr;
+arrfirst_point.push(first_point);
+};
+var new_GBIF = new OpenLayers.Layer.Vector(document.getElementById("id_textGBIFLayer").value,{renderers:["Canvas", "SVG", "VML"]});
+new_GBIF.addFeatures(arrfirst_point);
+var new_style_layer= new OpenLayers.Style({
+ pointRadius: 3, fillColor: "#FF9000", strokeColor: "#FF9000", strokeWidth: 1,fillOpacity:1, strokeOpacity:1 });
+ var selStyle = new OpenLayers.Style({ pointRadius: 5,  fillColor: "#ffaa00",
+ strokeColor: "#00DDFF", strokeWidth:2,fillOpacity:1, strokeOpacity:1 }); 
+new_GBIF.styleMap=new OpenLayers.StyleMap({'default':new_style_layer,'select': selStyle});
+new_GBIF.events.register("loadstart",new_GBIF, function() {WaitWindow();});
+map.addLayer(new_GBIF);
+new_GBIF.events.register("loadend",new_GBIF, function() {if(popup_Wait){try{popup_Wait.destroy();}catch(e){};} });
+ var t=document.createElement('option');
+t.value=new_GBIF.name;
+t.text=new_GBIF.name;
+document.getElementById("editL1").appendChild(t);
+if(document.getElementById("id_waitGBIF2")){document.getElementById("id_waitGBIF2").parentNode.removeChild(document.getElementById("id_waitGBIF2"))}
+}
+catch (e) {alert(e);return;}
+}}
+xmlhttp.send(null);
+}
 function OpenSreetMapdatabase()
 {
 var bbox = document.getElementById("map").getBoundingClientRect();
@@ -13257,6 +13398,7 @@ DivEditeLeg.innerHTML='<div id="id_divPaleBioLeg" style="background:#ffffff; col
 '<input type="checkbox" id="Id_PaleolinkWiki" value="checkbox"/>add link of wikipedia to attributes<br>'+
 '<input type="checkbox" id="Id_PaleolinkWiki1" value="checkbox"/>add general comments about the geology of the collection site<br>'+
 '<input type="checkbox" id="Id_PaleolinkWiki2" value="checkbox"/>add detailed description of the collection site in terms of lithology<br>'+
+'<input type="checkbox" id="Id_PaleolinkFieldun" checked value="checkbox"/>do not show fields with undefined information<br>'+
 '<p> <button type=button onclick=OK_PaleoBase()>OK</button></p><div id="waitPaleoBio"></div></div>';
 if(!document.getElementById("id_PaleBioLegMain2"))
 {body.appendChild(DivEditeLeg); }
@@ -13270,11 +13412,12 @@ this.value = new OpenLayers.Format.WKT().write(FeatClone)}}
 
 try {var xmlhttp =new XMLHttpRequest();}
 catch (e) {alert("error");return;}
-myUrl='http://paleobiodb.org/data1.1/intervals/list.json?scale=all&limit=all&showsource';
-myUrl=encodeURIComponent(myUrl);
-xmlhttp.open('GET','/temp.php?c='+myUrl+'&rand='+Math.random(), true);
-xmlhttp.setRequestHeader("Cache-Control", "no-cache");
-xmlhttp.setRequestHeader("Content-type", "text/xml");
+myUrl='https://paleobiodb.org/data1.2/intervals/list.json?scale=all&limit=all';
+//myUrl=encodeURIComponent(myUrl);
+//xmlhttp.open('GET','/wms.php?c='+myUrl+'&rand='+Math.random(), true);
+xmlhttp.open('GET', myUrl, true);
+//xmlhttp.setRequestHeader("Cache-Control", "no-cache");
+//xmlhttp.setRequestHeader("Content-type", "text/xml");
 xmlhttp.onreadystatechange = function()
 {if(xmlhttp.readyState == 4&&xmlhttp.status == 200) {
 if(xmlhttp.responseText==''){alert("no data");return;}
@@ -13299,9 +13442,7 @@ wrapper.appendChild(sorted[i].element);
 }
 document.getElementById("id_TimePaleoB")[1].selected=true;
 } }
-alert("This function works only in online web version of OpenWebGIS")
-{return;
-xmlhttp.send(null);}
+xmlhttp.send(null);
 
 
 }
@@ -13326,15 +13467,19 @@ if(document.getElementById("id_fromPaleoBiolEarly_age").value!=='')
 {earlyAge1='max_ma='+document.getElementById("id_fromPaleoBiolEarly_age").value;arrayStrPaleo.push(earlyAge1);}
 if(document.getElementById("id_toPaleoBiolEarly_age").value!=='')
 {earlyAge2='min_ma='+document.getElementById("id_toPaleoBiolEarly_age").value;arrayStrPaleo.push(earlyAge2);}
-if(earlyAge1!==''&&timeinter!==''){alert("you can not include more than one of 'interval'.Select only Time Interval or temporal locality (in Ma)");return;}
+if(earlyAge1!==''&&timeinter!==''){alert("you can not include more than one of 'interval'. Select only Time Interval or temporal locality (in Ma)");if(document.getElementById("a_waitPaleoBio")){document.getElementById("a_waitPaleoBio").parentNode.removeChild(document.getElementById("a_waitPaleoBio"))};return;}
 var queryStr=arrayStrPaleo.join('&');
-myUrl='http://paleobiodb.org/data1.1/occs/list.json?limit='+resultC+'&'+queryStr+'&show=loc,time,prot,ident,strat,phylo,coords,entname,lith,geo';
+//myUrl='http://paleobiodb.org/data1.1/occs/list.json?limit='+resultC+'&'+queryStr+'&show=loc,time,prot,ident,strat,phylo,coords,entname,lith,geo';
 
-myUrl=encodeURIComponent(myUrl);
+//myUrl=encodeURIComponent(myUrl);
 
-xmlhttp.open('GET','/temp.php?c='+myUrl+'&rand='+Math.random(), true);
-xmlhttp.setRequestHeader("Cache-Control", "no-cache");
-xmlhttp.setRequestHeader("Content-type", "text/xml");
+//xmlhttp.open('GET','/wms.php?c='+myUrl+'&rand='+Math.random(), true);
+myUrl='https://paleobiodb.org/data1.2/occs/list.json?limit='+resultC+'&'+queryStr+'&show=full';
+
+xmlhttp.open('GET',myUrl, true);
+/*xmlhttp.setRequestHeader("Cache-Control", "no-cache");
+ xmlhttp.setRequestHeader("Access-Control-Allow-Origin","*");
+xmlhttp.setRequestHeader("Content-type", "text/xml");*/
 xmlhttp.onreadystatechange = function()
 {if(xmlhttp.readyState == 4&&xmlhttp.status == 200) {//myUrl=xmlhttp.responseText;
 if(document.getElementById("a_waitPaleoBio")){document.getElementById("a_waitPaleoBio").parentNode.removeChild(document.getElementById("a_waitPaleoBio"))}
@@ -13395,15 +13540,36 @@ first_point.attributes["enterer"]=first_point.attributes["ent"];first_point.attr
 first_point.attributes["genus_reso"]=first_point.attributes["rst"];first_point.attributes["county"]=first_point.attributes["cny"];
 first_point.attributes["matched_name"]=first_point.attributes["mna"];first_point.attributes["protected"]=first_point.attributes["ptd"];
 first_point.attributes["species_reso"]=first_point.attributes["rss"];first_point.attributes["late_interval"]=first_point.attributes["oli"];
-first_point.attributes["lithology2"]=first_point.attributes["lt2"];
-first_point.attributes["lithology1"]=first_point.attributes["lt1"];
-first_point.attributes["environment"]=first_point.attributes["env"];
-first_point.attributes["lithification1"]=first_point.attributes["lf1"];
-first_point.attributes["lithification2"]=first_point.attributes["lf2"];
-first_point.attributes["minor_lithology2"]=first_point.attributes["lm2"];
-first_point.attributes["minor_lithology1"]=first_point.attributes["lm1"];
-first_point.attributes["tectonic_setting"]=first_point.attributes["tec"];
+first_point.attributes["lithology2"]=first_point.attributes["lt2"];first_point.attributes["lithology1"]=first_point.attributes["lt1"];
+first_point.attributes["environment"]=first_point.attributes["env"];first_point.attributes["lithification1"]=first_point.attributes["lf1"];
+first_point.attributes["lithification2"]=first_point.attributes["lf2"];first_point.attributes["minor_lithology2"]=first_point.attributes["lm2"];
+first_point.attributes["minor_lithology1"]=first_point.attributes["lm1"];first_point.attributes["tectonic_setting"]=first_point.attributes["tec"]; 
 
+first_point.attributes["identified_name"]=first_point.attributes["idn"];first_point.attributes["identified_no"]=first_point.attributes["iid"];
+first_point.attributes["difference"]=first_point.attributes["tdf"];first_point.attributes["ref_author"]=first_point.attributes["aut"];
+first_point.attributes["ref_pubyr"]=first_point.attributes["pby"];first_point.attributes["genus"]=first_point.attributes["gnl"]; 
+first_point.attributes["abund_value"]=first_point.attributes["abv"];first_point.attributes["abund_unit"]=first_point.attributes["abu"];
+first_point.attributes["state"]=first_point.attributes["stp"];first_point.attributes["geogcomments"]=first_point.attributes["ggc"];
+first_point.attributes["paleomodel"]=first_point.attributes["pm1"];first_point.attributes["paleolng"]=first_point.attributes["pln"];
+first_point.attributes["paleolat"]=first_point.attributes["pla"];first_point.attributes["geoplate"]=first_point.attributes["gpl"];
+first_point.attributes["stratscale"]=first_point.attributes["ssc"];first_point.attributes["lithadj1"]=first_point.attributes["la1"];
+first_point.attributes["fossilsfrom1"]=first_point.attributes["ff1"];first_point.attributes["lithadj2"]=first_point.attributes["la2"];
+first_point.attributes["motility"]=first_point.attributes["jmo"];first_point.attributes["life_habit"]=first_point.attributes["jlh"];
+first_point.attributes["diet"]=first_point.attributes["jdt"];first_point.attributes["composition"]=first_point.attributes["jco"];
+first_point.attributes["architecture"]=first_point.attributes["jsa"];first_point.attributes["thickness"]=first_point.attributes["jth"];
+first_point.attributes["collection_type"]=first_point.attributes["cct"];first_point.attributes["collection_methods"]=first_point.attributes["ccx"];
+first_point.attributes["collection_coverage"]=first_point.attributes["ccv"];first_point.attributes["collection_size"]=first_point.attributes["ccs"];
+first_point.attributes["stratcomments"]=first_point.attributes["scm"];first_point.attributes["fossilsfrom2"]=first_point.attributes["ff2"];
+first_point.attributes["collectors"]=first_point.attributes["ccc"];first_point.attributes["collection_dates"]=first_point.attributes["ccd"];
+first_point.attributes["museum"]=first_point.attributes["ccu"];first_point.attributes["collection_comments"]=first_point.attributes["ccm"];
+first_point.attributes["identified_rank"]=first_point.attributes["idr"];first_point.attributes["taxonomy_comments"]=first_point.attributes["tcm"];
+first_point.attributes["preservation"]=first_point.attributes["prs"];first_point.attributes["localsection"]=first_point.attributes["sls"];
+first_point.attributes["localbed"]=first_point.attributes["slb"];first_point.attributes["localorder"]=first_point.attributes["slo"];
+first_point.attributes["rock_censused"]=first_point.attributes["ccr"];first_point.attributes["zone"]=first_point.attributes["szn"];
+first_point.attributes["regionalorder"]=first_point.attributes["sro"];first_point.attributes["regionalbed"]=first_point.attributes["srb"];
+first_point.attributes["regionalsection"]=first_point.attributes["srs"];
+ 
+if(document.getElementById("Id_PaleolinkFieldun").checked==true){for (hh in first_point.attributes){if(first_point.attributes[hh]==undefined){delete first_point.attributes[hh]}}  }
 if(document.getElementById("Id_PaleolinkWiki1").checked==true){first_point.attributes["geology_comments"]=first_point.attributes["gcm"]}
 if(document.getElementById("Id_PaleolinkWiki2").checked==true){first_point.attributes["lithdescript"]=first_point.attributes["ldc"]}
 delete first_point.attributes["oid"];delete first_point.attributes["typ"];delete first_point.attributes["eid"];delete first_point.attributes["cid"];
@@ -13417,16 +13583,28 @@ delete first_point.attributes["ent"];delete first_point.attributes["mdf"];delete
 delete first_point.attributes["mna"];delete first_point.attributes["ptd"];delete first_point.attributes["rss"];delete first_point.attributes["oli"];
 delete first_point.attributes["sfm"]; delete first_point.attributes["sgr"];
 delete first_point.attributes["smb"];delete first_point.attributes["odn"];delete first_point.attributes["odl"];delete first_point.attributes["idf"];
-delete first_point.attributes["mra"];
-delete first_point.attributes["lt2"];delete first_point.attributes["lt1"];delete first_point.attributes["env"];delete first_point.attributes["lf1"];delete first_point.attributes["lf2"];delete first_point.attributes["lm1"]; delete first_point.attributes["lm2"];
-delete first_point.attributes["tec"];
-delete first_point.attributes["gcm"]
-delete first_point.attributes["ldc"]
+delete first_point.attributes["mra"];delete first_point.attributes["lt2"];delete first_point.attributes["lt1"];delete first_point.attributes["env"];delete first_point.attributes["lf1"];delete first_point.attributes["lf2"];delete first_point.attributes["lm1"]; delete first_point.attributes["lm2"];delete first_point.attributes["tec"];delete first_point.attributes["gcm"];delete first_point.attributes["ldc"]
+
+delete first_point.attributes["idn"];delete first_point.attributes["iid"];delete first_point.attributes["tdf"];delete first_point.attributes["aut"];
+delete first_point.attributes["pby"];delete first_point.attributes["gnl"]; delete first_point.attributes["abv"];delete first_point.attributes["abu"];
+delete first_point.attributes["stp"];delete first_point.attributes["ggc"];delete first_point.attributes["pm1"];delete first_point.attributes["pln"];
+delete first_point.attributes["pla"];delete first_point.attributes["gpl"];delete first_point.attributes["ssc"];delete first_point.attributes["la1"];
+delete first_point.attributes["ff1"];delete first_point.attributes["la2"];delete first_point.attributes["jmo"];delete first_point.attributes["jlh"];
+delete first_point.attributes["jdt"];delete first_point.attributes["jco"];delete first_point.attributes["jsa"];delete first_point.attributes["jth"];
+delete first_point.attributes["cct"];delete first_point.attributes["ccx"];delete first_point.attributes["ccv"];delete first_point.attributes["ccs"];
+delete first_point.attributes["scm"];delete first_point.attributes["ff2"];delete first_point.attributes["ccc"];delete first_point.attributes["ccd"];
+delete first_point.attributes["ccu"];delete first_point.attributes["ccm"];delete first_point.attributes["idr"];delete first_point.attributes["tcm"];
+delete first_point.attributes["prs"];delete first_point.attributes["sls"];delete first_point.attributes["slb"];delete first_point.attributes["slo"];
+delete first_point.attributes["ccr"];delete first_point.attributes["szn"];
+delete first_point.attributes["sro"];delete first_point.attributes["srb"];
+delete first_point.attributes["srs"];
+
+
 if(document.getElementById("Id_PaleolinkWiki").checked==true)
 {for (var i in first_point.attributes)
 {if(i=="order"||i=="subgenus_name"||i=="taxon_name"||i=="stratgroup"||i=="early_interval"||i=="state"||i=="country"||i=="species_name"||i=="family"||i=="class"||i=="late_interval"||i=="matched_name"||i=="county"||i=="phylum"||i=="genus_name"||i=="lithology2")
 {if (typeof first_point.attributes[i]=='undefined'){}else{ if(first_point.attributes[i]&&typeof(first_point.attributes[i])=="string"){var paleoStr=first_point.attributes[i].replace(/\s+/g, '_');}
-first_point.attributes[i]="<a href=https://en.wikipedia.org/wiki/"+paleoStr+" target=_blank>"+first_point.attributes[i]+'</a>';}}}
+first_point.attributes[i]='<a href="https://en.wikipedia.org/wiki/'+paleoStr+'" target="_blank">'+first_point.attributes[i]+'</a>';}}}
 
 }
 arrfirst_point.push(first_point);
@@ -13450,9 +13628,8 @@ document.getElementById("editL1").appendChild(t);
 }
 }
 
-alert("This function works only in online web version of OpenWebGIS")
-{return;
-xmlhttp.send(null);}
+
+xmlhttp.send(null);
 
 }
 function EarthquakesB()
@@ -14079,6 +14256,10 @@ document.getElementById("id_MonTempLegMain2").onmouseup=function(e){enddrag()};
 function closeOSMDBWin()
 {document.getElementById("id_OpenStreetMapMain2").parentNode.removeChild(document.getElementById("id_OpenStreetMapMain2"));
 for(var i=0;i<map.controls.length;i++){if(map.controls[i].title=="Download this bounding box from the OpenStreetMap database"){ map.controls[i].destroy();}} delete OpenLayers.Control.Click;
+}
+function closeGBIFDBWin()
+{document.getElementById("id_GBIFMapMain2").parentNode.removeChild(document.getElementById("id_GBIFMapMain2"));
+for(var i=0;i<map.controls.length;i++){if(map.controls[i].title=="Download this bounding box from the GBIF database"){ map.controls[i].destroy();}} delete OpenLayers.Control.Click;
 }
 function closeMTempWin()
 {document.getElementById("id_MonTempLegMain2").parentNode.removeChild(document.getElementById("id_MonTempLegMain2"));
@@ -24510,6 +24691,7 @@ Item separation symbol must be the semicolon or comma" class="podpunkt" onMouseO
 <a href="#" onclick="MonTemperature();"><div class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div title="This service is provided by International Research Institute for Climate and Society (IGOSS) http://iridl.ldeo.columbia.edu" style="font-size:11px">Monthly temperature</div></div></a>
 <a href="#" onclick="InternationalSpace();"><div class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div title="Satellites Tracking" style="font-size:11px">Satellites Tracking</div></div></a>
 <a href="#" onclick="OpenSreetMapdatabase();"><div class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div title="Select information from OpenSreetMap database" style="font-size:11px">OpenSreetMap database</div></div></a>
+<a href="#" onclick="GBIFMapdatabase();"><div class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div title="Select information from The Global Biodiversity Information Facility (GBIF) is an international open data infrastructure, funded by governments." style="font-size:11px">Global Biodiversity</div></div></a>
  
 </div></div>
 </div>
