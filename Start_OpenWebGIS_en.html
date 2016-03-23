@@ -7469,6 +7469,28 @@ if (document.getElementById("id_checkPolyMergenumrep").checked==true)
 {edilayerMainLayer.removeFeatures(edilayerMainLayer.features[j])}
 }} }
 return;}
+if (document.getElementById("id_checkLineMergenum").checked==true)
+{var xy=[];var xy2=[];var xypoint=[];
+for(var jj=0;jj<points.length;jj++)
+{xypoint=parseObjPolp(points[jj].geometry,xy,xy2); }
+var poiForPol=[];
+for(var jj=0;jj<xypoint.length;jj++)
+{var n_point= new OpenLayers.Geometry.Point(xypoint[jj][0], xypoint[jj][1]);poiForPol.push(n_point);}
+ //var arp=convexHull(poiForPol); 
+
+var sp=new OpenLayers.Geometry.LineString(poiForPol);
+if(sp!=='')  {sp=new OpenLayers.Feature.Vector(sp);
+if(document.getElementById("AddPointP_layer_name_id").value!=='0')
+{if(obj2!=={}){sp.attributes=obj2;nl.addFeatures(sp);}
+else{nl.addFeatures(sp)}  }else{new_layer_imagep.addFeatures(sp)}} 
+
+if (document.getElementById("id_checkPolyMergenumrep").checked==true)
+{for(var j=0;j<edilayerMainLayer.features.length;j++)
+{for(var jj=0;jj<edilayerMainLayer.selectedFeatures.length;jj++)
+{if(edilayerMainLayer.selectedFeatures[jj]==edilayerMainLayer.features[j])
+{edilayerMainLayer.removeFeatures(edilayerMainLayer.features[j])}
+}} }
+return;}
 
 if(document.getElementById("id_checkLinepointnum").checked==true)
 {try{var pointsn=[];
@@ -15235,6 +15257,9 @@ DivEditeLeg.innerHTML='<div id="id_divIDWmpowg_Leg" style="background:#ffffff; c
 'or set number of classification:<select id=Id_coloIDWClass onchange="ChangeIDWclassification()">'+
 '</select><br><div id="id_ChangeIDWbutton"></div>'+
 '<input type="checkbox" id="IDW_export_interp" value="checkbox"/>Export in arcgrid format; no data value:<input type="text" size="5" id="Id_noIDWowgLayerName_val" value="-9999"/><br>'+
+'limiting polygon<select id=interpIDW_limit >'+
+ '<option selected value="0">.</option>'+
+'</select><br><div id="global_sum_IDW"></div><br>'+
 '<p> <button id="okIDWOWG_id" type=button onclick=IDWCanvas2()>OK</button></p>'
 '</div>';
 if(!document.getElementById("id_IDWOWGLegMain2"))
@@ -15249,7 +15274,10 @@ for(var ii=0; ii<=20;ii++)
   var tt2=document.createElement('option');tt2.value=ii;tt2.text=ii;
 document.getElementById("Id_coloIDWClass").appendChild(tt2);
 }
-
+document.getElementById("interpIDW_limit").innerHTML='';var t=document.createElement('option'); t.value="."; t.text="";document.getElementById("interpIDW_limit").appendChild(t);
+for (var il=0; il<map.layers.length;il++)
+{if (map.layers[il].CLASS_NAME=="OpenLayers.Layer.Vector"){var t=document.createElement('option'); t.value=map.layers[il].name; t.text=map.layers[il].name;
+ document.getElementById("interpIDW_limit").appendChild(t); }}
 }
 }
 function IDWCanvas2(zoomIDW)
@@ -15278,9 +15306,18 @@ var format = new OpenLayers.Format.GeoJSON({ 'internalProjection': new OpenLayer
 'externalProjection': new OpenLayers.Projection("EPSG:900913")});
 var jsonstringH = format.write(edilayerMainLayer.features);
 new_layer_Heat.featuresIn=JSON.parse(jsonstringH).features;
+if(document.getElementById("interpIDW_limit")&&document.getElementById("interpIDW_limit").value!=="0")
+{for(var lim=0;lim<map.layers.length;lim++)
+{if(map.layers[lim].name==document.getElementById("interpIDW_limit").value&&map.layers[lim].CLASS_NAME=="OpenLayers.Layer.Vector")
+{var jsonstringLim = format.write(map.layers[lim].features);rtt=jsonstringLim; 
+;new_layer_Heat.featuresLim=format.read(jsonstringLim);rtt=new_layer_Heat; }}}else{new_layer_Heat.featuresLim='';}
 for (var i=0;i<new_layer_Heat.featuresIn.length;i++)
 {var pix=map.getPixelFromLonLat(new OpenLayers.LonLat(new_layer_Heat.featuresIn[i].geometry.coordinates[0],new_layer_Heat.featuresIn[i].geometry.coordinates[1]));
-data.push([pix.x, pix.y,new_layer_Heat.featuresIn[i].properties[document.getElementById("IDWselectatrowg_id").value]]);}
+var interlim1=1;interlim1=IntersectLimitIDWPol(interlim1,pix.x, pix.y,new_layer_Heat);
+if(interlim1==1)
+{data.push([pix.x, pix.y,new_layer_Heat.featuresIn[i].properties[document.getElementById("IDWselectatrowg_id").value]]);}
+else
+{new_layer_Heat.featuresIn.splice(i,1);i--;}}
 } 
 new_layer_Heat.idwmapparams={attribute:document.getElementById("IDWselectatrowg_id").value,radius:parseFloat(document.getElementById("Id_radIDWowgLayerNameAtl").value),
 p:parseFloat(document.getElementById("Id_pIDWowgLayerNameAtl").value),opacity:parseFloat(document.getElementById("Id_opIDWowgLayerNameAtl").value),smooth:parseFloat(document.getElementById("Id_smootIDWowgLayerNameAtl").value)}
@@ -15296,8 +15333,12 @@ if(indiv.childNodes[0].childNodes[d].id.split("_col_")[1]){strcolor+=indiv.child
 else{var new_layer_Heat=zoomIDW;data=[];
 for (var i=0;i<new_layer_Heat.featuresIn.length;i++)
 {var pix=map.getPixelFromLonLat(new OpenLayers.LonLat(new_layer_Heat.featuresIn[i].geometry.coordinates[0],new_layer_Heat.featuresIn[i].geometry.coordinates[1]));
-data.push([pix.x, pix.y,new_layer_Heat.featuresIn[i].properties[new_layer_Heat.idwmapparams.attribute]]);}
-
+var interlim1=1;interlim1=IntersectLimitIDWPol(interlim1,pix.x, pix.y,new_layer_Heat);
+if(interlim1==1)
+{data.push([pix.x, pix.y,new_layer_Heat.featuresIn[i].properties[new_layer_Heat.idwmapparams.attribute]]);}
+else
+{new_layer_Heat.featuresIn.splice(i,1);i--;}
+}
 }
 var strforexport='';
 var minDistC = parseFloat(new_layer_Heat.featuresIn[0].properties[new_layer_Heat.idwmapparams.attribute]);
@@ -15335,6 +15376,7 @@ addLegendHeatmap(gColors,new_layer_Heat.name)
 var start = performance.now(); var smoothIDW=parseFloat(new_layer_Heat.idwmapparams.smooth);var p = new_layer_Heat.idwmapparams.p;
 if((document.getElementById("IDW_export_interp")&&document.getElementById("IDW_export_interp").checked==true)||(document.getElementById("Expgrselectatrowg_id")&&exportGridOWG==1))
 {if(document.getElementById("Expgrselectatrowg_id")&&exportGridOWG==1){novalidw=document.getElementById("Id_noExgrtowgLayerName_val").value}else{var novalidw=document.getElementById("Id_noIDWowgLayerName_val").value;} }
+var global_sum=0;var countIDW=0;var squaredVal1=0;
  for (var i=0;i<brushCanvasF.height;i++)
  {
  for (var j=0;j<brushCanvasF.width;j++)
@@ -15369,9 +15411,13 @@ if(indrad==1)
     u += wis[l]/wj; 
  }  
 
-
+var indlimit=1;indlimit=IntersectLimitIDWPol(indlimit,j,i,new_layer_Heat);
+if(indlimit==1){global_sum=global_sum+parseFloat(u);countIDW++;squaredVal1+=u*u;
 if((document.getElementById("IDW_export_interp")&&document.getElementById("IDW_export_interp").checked==true)||(document.getElementById("Expgrselectatrowg_id")&&exportGridOWG==1))
-{if(j==brushCanvasF.width-1){strforexport+=u+"\n";}else{strforexport+=u+" ";}}
+{if(j==brushCanvasF.width-1){strforexport+=u+"\n";}else{strforexport+=u+" ";}} }
+else
+{if((document.getElementById("IDW_export_interp")&&document.getElementById("IDW_export_interp").checked==true)||(document.getElementById("Expgrselectatrowg_id")&&exportGridOWG==1))
+{if(j==brushCanvasF.width-1){strforexport+=novalidw+"\n";}else{strforexport+=novalidw+" ";}}}
 if(exprtV==1)
 {if(document.getElementById("Id_IDWowgLayerNamePix_inerval".value=="0"))
    {var ext1 = new OpenLayers.Pixel(j,i);var lonlat1 = map.getLonLatFromPixel(ext1);var lonlat2 = map.getLonLatFromPixel(ext1);
@@ -15420,7 +15466,7 @@ if(scale==s)
 
 //ctx.fillStyle="rgba("+scale+","+0+","+cr+","+"1)"
 }
-ctx.fillRect(j, i, 1, 1);
+if(indlimit==1){ctx.fillRect(j, i, 1, 1);}
 }
   }   }
 if((document.getElementById("IDW_export_interp")&&document.getElementById("IDW_export_interp").checked==true)||(document.getElementById("Expgrselectatrowg_id")&&exportGridOWG==1))
@@ -15451,6 +15497,9 @@ kmlText2=dops+strforexport; myWinExport= open("download.html", "Export arcgrid",
 }
 var end =  performance.now()  // log end timestamp
 var diff = end - start;console.log("time1:"+diff);
+if(document.getElementById("global_sum_IDW")){var avr=global_sum/countIDW;
+var variance=(squaredVal1/countIDW)-(avr*avr);
+document.getElementById("global_sum_IDW").innerHTML="Sum:"+global_sum+",<br> Count: "+countIDW+"<br> Mean: "+avr+"<br> Variance: "+variance+"<br> Standard Deviation: "+Math.sqrt(variance);}
 if(zoomIDW==0)
 {map.addLayer(new_layer_Heat);}
 else{new_layer_Heat.div.removeChild(zoomIDW.div.childNodes[0]);}
@@ -15468,6 +15517,23 @@ t.value=new_layer_Vector.name;t.text=new_layer_Vector.name;
 document.getElementById("editL1").appendChild(t)
 }
 
+}
+function IntersectLimitIDWPol(intl, lx, ly,new_layer_Heat)
+{var intl2=intl;
+if(new_layer_Heat.featuresLim)
+{if(new_layer_Heat.featuresLim!=='')
+{
+
+for (var fl=0;fl<new_layer_Heat.featuresLim.length;fl++)
+{
+
+if(new_layer_Heat.featuresLim[fl].geometry.CLASS_NAME=="OpenLayers.Geometry.Polygon"||new_layer_Heat.featuresLim[fl].geometry.CLASS_NAME=="OpenLayers.Geometry.MultiPolygon")
+{var extlim = new OpenLayers.Pixel(lx, ly);var new_pos = map.getLonLatFromPixel(extlim);
+var new_lon=new_pos.lon; var new_lat=new_pos.lat;var first_point =new OpenLayers.Geometry.Point(new_lon, new_lat);first_point= new OpenLayers.Feature.Vector(first_point);
+var intersect=new_layer_Heat.featuresLim[fl].geometry.intersects(first_point.geometry);
+if(intersect==true||intersect==1){intl2=1;} if(intersect==false||intersect==0){intl2=0}; //if(intersect!==true&&intersect!==false){rtt=intersect;alert(intersect)}
+} }   } }
+return intl2;
 }
 
 function ChangeIDWclassification()
@@ -16165,7 +16231,10 @@ function ShowEdiLayerGeoM()
 features=featuresGeomM;
 var nameGeoM=document.getElementById("functionGeoM").value.split(':')[1]
 var new_layer_G = new OpenLayers.Layer.Vector(edilayerMainLayer.name+"_"+nameGeoM);
-var format = new OpenLayers.Format.GeoJSON({ 
+if(document.getElementById("id_setWGS84WPS").value=="application/wkt")
+{}
+else
+{var format = new OpenLayers.Format.GeoJSON({ 
  'internalProjection': new OpenLayers.Projection("EPSG:4326"),
 'externalProjection': new OpenLayers.Projection("EPSG:900913")
 });
@@ -16175,7 +16244,7 @@ var format2 = new OpenLayers.Format.GeoJSON({
  'internalProjection': new OpenLayers.Projection("EPSG:900913"),
 'externalProjection': new OpenLayers.Projection("EPSG:900913")
 });
-features=format2.read(jsonstring)
+features=format2.read(jsonstring) }
 for(i=0;i<features.length;i++)
 {features[i].state = OpenLayers.State.INSERT}
 edilayerMainLayer.addFeatures(features);
@@ -16187,18 +16256,19 @@ features=featuresGeomM;
 var nameGeoM=document.getElementById("functionGeoM").value.split(':')[1]
 var new_layer_G = new OpenLayers.Layer.Vector(edilayerMainLayer.name+"_"+nameGeoM);
 if(!featuresGeomM.markwebgisWFS||nameGeoM=="RasterAsPointCollection"){
+if(document.getElementById("id_setWGS84WPS").value=="application/wkt")
+{}else{rtt=features;alert("sss2")
 var format = new OpenLayers.Format.GeoJSON({ 
  'internalProjection': new OpenLayers.Projection("EPSG:4326"),
 'externalProjection': new OpenLayers.Projection("EPSG:900913")
 });
 var jsonstring = format.write(features);
-rtt=jsonstring;
 var format2 = new OpenLayers.Format.GeoJSON({ 
  'internalProjection': new OpenLayers.Projection("EPSG:900913"),
 'externalProjection': new OpenLayers.Projection("EPSG:900913")
 });
 
-features=format2.read(jsonstring)
+features=format2.read(jsonstring)}
 }else{features.markwebgisWFS=1;delete features.markwebgisWFS}
 new_layer_G.addFeatures(features);
 new_layer_G.projection=new OpenLayers.Projection("EPSG:900913");
@@ -16213,40 +16283,18 @@ function setMarcSaveGeoM()
 featuresGeomM.state = OpenLayers.State.INSERT; }
 function setShowCoordGeom(geomtext, resultGeom)
  { 
- var wktS=geomtext.split('(');
-var startGeomStr=wktS[0];
-var startGeomStr2;
- if(wktS[1]=="")
- {
- startGeomStr=startGeomStr+"((";
- startGeomStr2="))";
- wktS=wktS[2];
- wktS=wktS.split(')');
- wktS=wktS[0];
- wktS=wktS.split(',');
- }
- else
- { startGeomStr=startGeomStr+"(";
- startGeomStr2=")";
- wktS=wktS[1];
- wktS=wktS.split(')');
- wktS=wktS[0];
- wktS=wktS.split(',');}
-var newGeoM=[];
-for(var i=0; i<wktS.length; ++i) 
-{
-var t=wktS[i].split(' ');
-if(t.length>2){t[0]=t[1];t[1]=t[2];}
-var new_pos=new OpenLayers.LonLat(t[0], t[1]).transform(
-map.getProjectionObject(),
-new OpenLayers.Projection("EPSG:4326"));
-var new_lon=new_pos.lon;
-var new_lat=new_pos.lat;
-if(t.length<3)
-{newGeoM[i]=new_pos.lon+' '+new_pos.lat;}
-else{newGeoM[i]=' '+new_pos.lon+' '+new_pos.lat;}
- }
- document.getElementById("textareaGeom").value = startGeomStr+newGeoM+startGeomStr2;
+ 
+ features = new OpenLayers.Format.WKT().read(geomtext); 
+ var format = new OpenLayers.Format.GeoJSON({ 
+ 'internalProjection': new OpenLayers.Projection("EPSG:4326"),
+'externalProjection': new OpenLayers.Projection("EPSG:900913")
+});
+ var format2 = new OpenLayers.Format.GeoJSON({  'internalProjection': new OpenLayers.Projection("EPSG:900913"),
+'externalProjection': new OpenLayers.Projection("EPSG:4326")});
+ var format3 = new OpenLayers.Format.GeoJSON({  });
+var jsonstring = format2.write(features);var Feature_json = format3.read(jsonstring);
+ features = new OpenLayers.Format.WKT().write(Feature_json); rtt=features; 
+ document.getElementById("textareaGeom").value = features;
  }
 function showOutput(response) {
 var result = document.getElementById("output");
@@ -16264,25 +16312,21 @@ var result = document.getElementById("output");
 if(!features.attributes)
 {
 }
-if(features.attributes)
-{ 
-edilayerMainLayer.addFeatures(features);
-}
 var dbvalue=response.responseText;
 featuresGeomM=features;
 if (contentType == "text/xml; subtype=wfs-collection/1.0")
 {featuresGeomM.markwebgisWFS='1';}
 var strGS='';
-if(!features.attributes)
+if(!features.attributes||features.attributes)
 {
 strGS="<br><input type='checkbox' id='MarcShowNewLayerGeoM' onclick='ShowNewLayerGeoM()'/><font size='2'>Show result in new Layer</font><br>";
 }
 var strGS2='';
-if(!features.attributes)
+if(!features.attributes||features.attributes)
 {
 strGS2="<input type='checkbox' id='MarcShowEdiLayerGeoM' onclick='ShowEdiLayerGeoM()'/><font size='2'>Show result in Editable Layer</font><br>";
 }
- result.innerHTML += "<font size='2'>The result should also be visible on the map.</font><br>"+"<input type=\"checkbox\" onclick='setShowCoordGeom(\""+dbvalue+"\",\""+result+"\")'/><font size='1'>Show WGS84 coordinates</font><br><input type='checkbox' id='MarcSaveGeoM' onclick='setMarcSaveGeoM()'/><font size='1'>Mark feature for Save</font><br>"+strGS+strGS2;
+ result.innerHTML += "<font size='2'>The result should also be visible on the map.</font><br>"+"<input id=id_setWGS84WPS type=\"checkbox\" value=\""+contentType+"\" onclick='setShowCoordGeom(\""+dbvalue+"\",\""+contentType+"\")'/><font size='1'>Show WGS84 coordinates</font><br><input type='checkbox' id='MarcSaveGeoM' onclick='setMarcSaveGeoM()'/><font size='1'>Mark feature for Save</font><br>"+strGS+strGS2;
 var check1=document.createElement("input");
 check1.type='checkbox';
 document.getElementById("output").appendChild(document.createElement("br"));
@@ -20874,7 +20918,7 @@ displayClass: "olControlLinkFeatures"
 });
 
 var pointPol = new OpenLayers.Control.Button({
-title: "create polygon from selected points or merge selected polygons",
+title: "create polygon from selected points or merge selected polygons, lines",
 trigger: function() {
 var bbox = document.getElementById("map").getBoundingClientRect();
  var body = document.body;
@@ -20897,6 +20941,7 @@ DivEditeLeg.innerHTML='<div id="id_divPointPolLeg" style="background:#ffffff; co
 '<a>Layer name:</a><input title="the name of the new vector layer with the results " type="text" id="PointP_layer_name_id" value="PointPolygon" size=15><br>'+
 '<a> Or add result to:</a><select id="AddPointP_layer_name_id" >'+ '<option selected value="0">.</option>'+'</select><br>'+ 
 '<input type="checkbox" id="id_checkPolyMergenum" title="merge selected polygons" value="checkbox"/><a style="font-size: 12px;">merge selected polygons</a><br>'+
+'<input type="checkbox" id="id_checkLineMergenum" title="merge selected lines" value="checkbox"/><a style="font-size: 12px;">merge selected lines</a><br>'+
 '<input type="checkbox" id="id_checkPolyMergenumrep" title="delete selected features from editable layer after merging operation" value="checkbox"/><a style="font-size: 12px;">delete selected features<br>'+
 '<p> <button type=button onclick=CreatePoLfromPoint()>OK</button></p>'+
 '</div>';
@@ -23705,7 +23750,10 @@ var OWGIDWmaps=''; var OWGIDWmapsStart=' startOWGIDWmaps '; var OWGIDWmapsEnd=' 
 for(var rew=0; rew<map.layers.length;rew++)
 {if(map.layers[rew].idwmapparams)
 {var objparh=JSON.stringify(map.layers[rew].idwmapparams);var objparF=JSON.stringify(map.layers[rew].featuresIn);
-listIDWL+=" startIDWlasl "+" snameowgIDWn "+map.layers[rew].name+";"+map.layers[rew].visibility+";"+rew+";"+map.layers[rew].getZIndex()+" enameowgIDWn "+" startOWGParamI "+objparh+" endOWGParamI "+" startOWGParamFi "+objparF+" endOWGParamFi "+" endIDWlasl "
+var formatlim = new OpenLayers.Format.GeoJSON({ });
+if(map.layers[rew].featuresLim&&map.layers[rew].featuresLim!=='')
+{var objparL=format.write(map.layers[rew].featuresLim);}else{objparL='';}
+listIDWL+=" startIDWlasl "+" snameowgIDWn "+map.layers[rew].name+";"+map.layers[rew].visibility+";"+rew+";"+map.layers[rew].getZIndex()+" enameowgIDWn "+" startOWGParamI "+objparh+" endOWGParamI "+" startOWGParamFi "+objparF+" endOWGParamFi "+" startOWGParamLim "+objparL+" endOWGParamLim "+" endIDWlasl "
 }  }
 if(listIDWL!==''){OWGIDWmaps= OWGIDWmapsStart+listIDWL+OWGIDWmapsEnd;}
 DataProjectWebGis+=OWGIDWmaps;
@@ -24349,6 +24397,10 @@ var parl=bheat.split(" snameowgIDWn ")[1].split(" enameowgIDWn ")[0].split(";")
 var new_layer_Heat = new OpenLayers.Layer(parl[0],{});
 new_layer_Heat.idwmapparams=JSON.parse(bheat.split(" startOWGParamI ")[1].split(" endOWGParamI ")[0]);
 new_layer_Heat.featuresIn=JSON.parse(bheat.split(" startOWGParamFi ")[1].split(" endOWGParamFi ")[0]);
+var formatlim = new OpenLayers.Format.GeoJSON({ });
+if(bheat.split(" startOWGParamLim ")[1].split(" endOWGParamLim ")[0]&&bheat.split(" startOWGParamLim ")[1].split(" endOWGParamLim ")[0]!=='')
+{new_layer_Heat.featuresLim=formatlim.read(bheat.split(" startOWGParamLim ")[1].split(" endOWGParamLim ")[0]);}
+else{new_layer_Heat.featuresLim='';}
 new_layer_Heat.IDWOWG="yes";
 var brushCanvasF = document.createElement('canvas');new_layer_Heat.setVisibility(eval(parl[1]))
 map.addLayer(new_layer_Heat);new_layer_Heat.div.appendChild(brushCanvasF);
