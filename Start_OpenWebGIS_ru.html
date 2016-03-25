@@ -7600,6 +7600,27 @@ if (document.getElementById("id_checkPolyMergenumrep").checked==true)
 return;}
 if (document.getElementById("id_checkLineMergenum").checked==true)
 {var xy=[];var xy2=[];var xypoint=[];
+if (document.getElementById("id_checkLineAnEnd").checked==true)
+{
+var format = new OpenLayers.Format.GeoJSON({ });
+points=format.write(points);points=format.read(points);
+for(var jj=1;jj<points.length;jj++)
+{{if(points[jj].geometry.CLASS_NAME=="OpenLayers.Geometry.MultiLineString")
+{for(var fl=0;fl<points[jj].geometry.components.length;fl++){points[jj].geometry.components[fl].components.reverse()}}
+if(points[jj].geometry.CLASS_NAME=="OpenLayers.Geometry.LineString")
+{points[jj].geometry.components.reverse()}
+}} }
+if (document.getElementById("id_checkFirstLineAnEnd").checked==true)
+{
+var format = new OpenLayers.Format.GeoJSON({ });
+points=format.write(points);points=format.read(points);
+
+{if(points[0].geometry.CLASS_NAME=="OpenLayers.Geometry.MultiLineString")
+{for(var fl=0;fl<points[0].geometry.components.length;fl++){points[0].geometry.components[fl].components.reverse()}}
+if(points[0].geometry.CLASS_NAME=="OpenLayers.Geometry.LineString")
+{points[0].geometry.components.reverse()}
+}
+}
 for(var jj=0;jj<points.length;jj++)
 {xypoint=parseObjPolp(points[jj].geometry,xy,xy2); }
 var poiForPol=[];
@@ -20977,7 +20998,8 @@ DivEditeLeg.innerHTML='<div id="id_divPointPolLeg" style="background:#ffffff; co
 '<a>Layer name:</a><input title="название нового векторного слоя с результатами" type="text" id="PointP_layer_name_id" value="PointPolygon" size=15><br>'+
 '<a> Or add result to:</a><select id="AddPointP_layer_name_id" >'+ '<option selected value="0">.</option>'+'</select><br>'+ 
 '<input type="checkbox" id="id_checkPolyMergenum" title="" value="checkbox"/><a style="font-size: 12px;">объединить выделенные(выбранные) полигоны</a><br>'+
-'<input type="checkbox" id="id_checkLineMergenum" title="объединить выделенные(выбранные) линии" value="checkbox"/><a style="font-size: 12px;">объединить выделенные(выбранные) линии</a><br>'+
+'<input type="checkbox" id="id_checkLineMergenum" title="объединить выделенные(выбранные) линии. Во время объединения линий учитывается последовательность рисования линий и последовательность их выделения" value="checkbox"/><a style="font-size: 12px;">объединить выделенные(выбранные) линии</a><input type="checkbox" id="id_checkLineAnEnd" title="" value="checkbox"/><a style="font-size: 12px;">соединять с другой стороны линии</a><br>'+
+'<input type="checkbox" id="id_checkFirstLineAnEnd" title="соединить с другой стороны линии" value="checkbox"/><a style="font-size: 11px;">объединить первую линии с другой стороны</a><br>'+
 '<input type="checkbox" id="id_checkPolyMergenumrep" title="удалить выделенные элементы редактируемого слоя после операции объединения" value="checkbox"/><a style="font-size: 12px;">удалить выделенные элементы<br>'+
 '<p> <button type=button onclick=CreatePoLfromPoint()>OK</button>'+
 '</div>';
