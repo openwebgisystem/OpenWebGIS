@@ -15295,7 +15295,7 @@ for(var ii=0; ii<=20;ii++)
   var tt2=document.createElement('option');tt2.value=ii;tt2.text=ii;
 document.getElementById("Id_coloIDWClass").appendChild(tt2);
 }
-document.getElementById("interpIDW_limit").innerHTML='';var t=document.createElement('option'); t.value="."; t.text="";document.getElementById("interpIDW_limit").appendChild(t);
+document.getElementById("interpIDW_limit").innerHTML='';var t=document.createElement('option'); t.value="0"; t.text="";document.getElementById("interpIDW_limit").appendChild(t);
 for (var il=0; il<map.layers.length;il++)
 {if (map.layers[il].CLASS_NAME=="OpenLayers.Layer.Vector"){var t=document.createElement('option'); t.value=map.layers[il].name; t.text=map.layers[il].name;
  document.getElementById("interpIDW_limit").appendChild(t); }}
