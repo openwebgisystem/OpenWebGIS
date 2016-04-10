@@ -4276,6 +4276,154 @@ popup_new_fileGML = new OpenLayers.Popup.FramedCloud("NewFilePopupGML",
  map.addPopup(popup_new_fileGML);
 document.getElementById('file_idGML').addEventListener('change', readSingleFileGML, false);
 }
+function New_LayerWMTS()
+{
+var bbox = document.getElementById("map").getBoundingClientRect();
+ var body = document.body; var docElem = document.documentElement;
+ var scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop;
+ var scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft;
+ var clientTop = docElem.clientTop || body.clientTop || 0; var clientLeft = docElem.clientLeft || body.clientLeft || 0;
+ var topTop = bbox.top + scrollTop - clientTop; var leftLeft = bbox.left + scrollLeft - clientLeft;
+var DivEditeLeg=document.createElement("div");
+DivEditeLeg.id="id_divWMTSLegMain2";DivEditeLeg.className="id_divRoutLegMain";
+DivEditeLeg.style.position="relative";
+DivEditeLeg.innerHTML='<div id="id_divWMTSLeg" style="background:#ffffff; color:#0000ff;z-index: 6000;position:absolute;left:'+Math.round(leftLeft+50)+'px;top:'+Math.round(topTop)+
+'px;overflow:hidden; border: 1px solid black;"><img onclick="closeWearherLegendWin(this)" src="openlayers/theme/default/img/close.gif" style="position:relative; top:10px;float:right; cursor:pointer"><a style="position:relative; top:20px"></a>'+
+'<a style="font-size: 9px;">you can move this window if you select menu item Interface/switch to interface drag</a><br>'+
+'<a>Please insert URL </a> <a href="https://en.wikipedia.org/wiki/Web_Map_Tile_Service" target="_blank">WMTS </a><a>server:</a><br>'+
+'<a>This function is in test mode!<a><br>'+
+'<textarea title=" String may look like this: http://geodata1.nationaalgeoregister.nl/luchtfoto/wmts" type="text" size="18" id="id_UrlWMTSAtl" value="" style="height:20px; width:300px"></textarea>url<br>'+
+'<a>Layer name:</a><input title="The name of the WMTS layer" type="text" id="WMTS_layer_name_id" value="WMTS_Layer" size=15><br>'+
+'<p> <button type=button onclick=OK_WMTSlayer()>Get parameters</button></p>'+
+'<a style="font-size: 11px;">The layer advertised by the WMTS service:</a>'+
+'<select id="WMTS_layer_name_id2"> '+'<option selected value="0">.</option>'+
+'</select><br>'+
+//<input title="style="font-size: 9px;"" type="text" id="WMTS_layer_name_id2" value="" size=15><br>'+
+'<a style="font-size: 11px;">TileMatrixSet:</a>'+
+'<select id="WMTS_TileMatrixSet_id"> '+'<option selected value="0">.</option>'+
+'</select><br>'+
+//<input title="style="font-size: 9px;"" type="text" id="WMTS_TileMatrixSet_id" value="" size=15><br>'+
+'<a style="font-size: 11px;">Format:</a>'+
+'<select id="WMTS_Format_id"> '+'<option selected value="0">.</option>'+
+'</select><br>'+
+//<input title="style="font-size: 9px;"" type="text" id="WMTS_Format_id" value="image/png" size=15><br>'+
+'<a style="font-size: 11px;">Opacity:</a><input title="style="font-size: 9px;"" type="text" id="WMTS_Opacity_id" value="0.8" size=5><br>'+
+'<a style="font-size: 11px;">MatrixId:</a>'+
+'<select id="WMTS_MatrixId_id"> '+'<option selected value="0">.</option>'+
+'</select><br>'+
+'<a style="font-size: 11px;">Style:</a>'+
+'<select id="WMTS_StyleId_id"> '+'<option selected value="default">default</option>'+
+'</select><br>'+
+'<a style="font-size: 11px;">Request encoding:</a>'+
+'<select id="WMTS_RequestId_id"> '+'<option selected value="KVP">KVP</option>'+'<option value="REST">REST</option>'+
+'</select><br>'+
+'<a style="font-size: 11px;">Supported_Coord_Ref_System:</a>'+
+'<select id="WMTS_CRSId_id"> '+'<option selected value="0">.</option>'+
+'</select><br>'+
+//<input title="style="font-size: 9px;"" type="text" id="WMTS_MatrixId_id" value="09" size=5><br>'+
+'<p> <button type=button onclick=OK_WMTSlayer2()>Add Layer after selection parameters</button></p>'+
+'<div id="add_wait_div_WMTS"></div>'+
+'</div>'
+if(!document.getElementById("id_divWMTSLeg"))
+{body.appendChild(DivEditeLeg); }
+document.getElementById("id_divWMTSLegMain2").onmousedown=function(event){drags(event)};
+document.getElementById("id_divWMTSLegMain2").onmouseup=function(e){enddrag()};
+}
+function OK_WMTSlayer()
+{
+   
+var waitT=document.createElement('a');waitT.id="a_waitWMTS_id";waitT.innerHTML="Wait...";document.getElementById("add_wait_div_WMTS").appendChild(waitT);
+try {var xmlhttp =new XMLHttpRequest();
+xmlhttp.open('GET','/wms.php?c='+encodeURIComponent(document.getElementById("id_UrlWMTSAtl").value+"?SERVICE=WMTS&VERSION=1.0.0&REQUEST=GetCapabilities")+'&rand='+Math.random(), true);}
+catch (e) {alert("error");
+return;}
+//xmlhttp.setRequestHeader("Cache-Control", "no-cache");
+//xmlhttp.setRequestHeader("Content-type", "text/xml");
+xmlhttp.onreadystatechange = function()
+{if(xmlhttp.readyState == 4&&xmlhttp.status == 200) {
+if(xmlhttp==''||xmlhttp=='cURL Error: '){alert("no data");return;if(document.getElementById("a_waitWMTS_id")){document.getElementById("a_waitWMTS_id").parentNode.removeChild(document.getElementById("a_waitWMTS_id"))}}
+var WMTScapabilities=xmlhttp.responseText;var format1= new OpenLayers.Format.XML({});
+var doc=format1.read(WMTScapabilities);var layers=doc.getElementsByTagName("Layer");
+document.getElementById("WMTS_layer_name_id2").innerHTML='';
+document.getElementById("WMTS_TileMatrixSet_id").innerHTML='';
+document.getElementById("WMTS_Format_id").innerHTML='';
+document.getElementById("WMTS_StyleId_id").innerHTML='';
+document.getElementById("WMTS_MatrixId_id").innerHTML='';
+document.getElementById("WMTS_CRSId_id").innerHTML='';
+if(document.getElementById("a_waitWMTS_id")){document.getElementById("a_waitWMTS_id").parentNode.removeChild(document.getElementById("a_waitWMTS_id"))}
+for (var l=0;l<layers.length;l++)
+{
+var nlay=layers[l].getElementsByTagName("ows:Identifier");
+for (var ll=0;ll<nlay.length;ll++)
+{rtt=layers; 
+if(nlay[ll].parentNode.nodeName!=='Style'){
+var t=document.createElement('option');
+t.value=nlay[ll].textContent;t.text=nlay[ll].textContent;
+document.getElementById("WMTS_layer_name_id2").appendChild(t);}}
+var nlay=layers[l].getElementsByTagName("TileMatrixSet");
+for (var ll=0;ll<nlay.length;ll++)
+{var t=document.createElement('option');
+t.value=nlay[ll].textContent;t.text=nlay[ll].textContent;
+document.getElementById("WMTS_TileMatrixSet_id").appendChild(t);}
+var nlay=layers[l].getElementsByTagName("Format");
+for (var ll=0;ll<nlay.length;ll++)
+{var t=document.createElement('option');
+t.value=nlay[ll].textContent;t.text=nlay[ll].textContent;
+document.getElementById("WMTS_Format_id").appendChild(t);}
+var style=layers[l].getElementsByTagName("Style");
+for (var ll=0;ll<style.length;ll++)
+{
+var styleid=style[ll].getElementsByTagName("ows:Identifier");
+for (var lll=0;lll<styleid.length;lll++)
+{var t=document.createElement('option');
+t.value=styleid[lll].textContent;t.text=styleid[lll].textContent;
+document.getElementById("WMTS_StyleId_id").appendChild(t);}}
+}
+var crs=doc.getElementsByTagName("ows:SupportedCRS");
+for (var ll=0;ll<crs.length;ll++)
+{
+var t=document.createElement('option');
+t.value=crs[ll].textContent;t.text=crs[ll].textContent;
+document.getElementById("WMTS_CRSId_id").appendChild(t);
+}
+
+var matrix=doc.getElementsByTagName("TileMatrix");
+for (var ll=0;ll<matrix.length;ll++)
+{
+var matrixId=matrix[ll].getElementsByTagName("ows:Identifier");
+for (var lll=0;lll<matrixId.length;lll++)
+{
+var t=document.createElement('option');
+t.value=matrixId[lll].textContent;t.text=matrixId[lll].textContent;
+document.getElementById("WMTS_MatrixId_id").appendChild(t);}}
+
+}
+}
+xmlhttp.send(null);
+}
+function OK_WMTSlayer2()
+{
+
+ var matrixIds = new Array(26);
+    for (var i=0; i<26; ++i) {
+        matrixIds[i] = document.getElementById("WMTS_MatrixId_id").value;
+    }
+    var wmts = new OpenLayers.Layer.WMTS({
+        name: document.getElementById("WMTS_layer_name_id").value,
+        url: document.getElementById("id_UrlWMTSAtl").value,
+        layer: document.getElementById("WMTS_layer_name_id2").value,
+        matrixSet: document.getElementById("WMTS_TileMatrixSet_id").value,
+        isBaseLayer: false,
+             // matrixIds: matrixIds,  
+        format: document.getElementById("WMTS_Format_id").value,  
+//       requestEncoding: "REST",  
+        requestEncoding: document.getElementById("WMTS_RequestId_id").value,  
+        style: document.getElementById("WMTS_StyleId_id").value,
+        opacity: document.getElementById("WMTS_Opacity_id").value  
+       
+    });
+    map.addLayer(wmts);
+}
 function New_LayerWMS()
 {
 var bbox = document.getElementById("map").getBoundingClientRect();
@@ -6943,8 +7091,24 @@ document.getElementById("id_divImageFileLegMain2").onmouseup=function(e){enddrag
 }
 document.getElementById('file_idImage').addEventListener('change', readSingleFileImage, false);
 }
-function OK_BoundImage2()
+function OK_BoundImageUnDo()
 {
+for(var i=0;i<map.layers.length;i++)
+{
+if(map.layers[i].name==document.getElementById("ImageLayerBound_id").value&&map.layers[i].CLASS_NAME=="OpenLayers.Layer.Image")
+{if(map.layers[i].initialImage){var lay=map.layers[i];lay.url=lay.initialImage;lay.tileSize.h=lay.initialtileH;lay.tileSize.w=lay.initialtileW;first_long=lay.initialCoords.split(';')[0];first_lat=lay.initialCoords.split(';')[1];
+sec_long=lay.initialCoords.split(';')[2];sec_lat=lay.initialCoords.split(';')[3];
+var boundImage=new OpenLayers.Bounds(first_long, first_lat, sec_long, sec_lat);boundImage.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
+document.getElementById("sec_long2").value=sec_long;
+document.getElementById("sec_lat2").value=sec_lat;
+document.getElementById("first_long2").value=first_long;;
+document.getElementById("first_lat2").value=first_lat;;
+lay.extent=boundImage;lay.redraw();}}
+}
+}
+function OK_BoundImage2()
+{var rotate=document.getElementById("id_rotate_img").value;
+
 var first_long=parseFloat(document.getElementById("first_long2").value);
 var first_lat=parseFloat(document.getElementById("first_lat2").value);
 var sec_long=parseFloat(document.getElementById("sec_long2").value);
@@ -6953,26 +7117,109 @@ var boundImage=new OpenLayers.Bounds(first_long, first_lat, sec_long, sec_lat)
  boundImage.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
 for(var i=0;i<map.layers.length;i++)
 {
-if(map.layers[i].name==document.getElementById("ImageLayerBound_id").value)
-{map.layers[i].extent=boundImage;map.layers[i].redraw();
+if(map.layers[i].name==document.getElementById("ImageLayerBound_id").value&&map.layers[i].CLASS_NAME=="OpenLayers.Layer.Image")
+{var lay=map.layers[i];
+if(!lay.initialImage)
+{lay.initialImage=lay.url;lay.initialtileH=lay.tileSize.h;lay.initialtileW=lay.tileSize.w; lay.initialCoords=first_long+';'+first_lat+';'+sec_long+';'+sec_lat}
+if(rotate!=="0"&&rotate!=='')
+{
+if(!lay.initialImage)
+{var img = new Image(); img.src=lay.url; }
+else{var img = new Image(); img.src=lay.initialImage; var tempTile_w=lay.tileSize.w;var tempTile_h=lay.tileSize.h;
+lay.url=lay.initialImage;lay.tileSize.h=lay.initialtileH;lay.tileSize.w=lay.initialtileW;first_long=lay.initialCoords.split(';')[0];first_lat=lay.initialCoords.split(';')[1];
+sec_long=lay.initialCoords.split(';')[2];sec_lat=lay.initialCoords.split(';')[3];
+var boundImage=new OpenLayers.Bounds(first_long, first_lat, sec_long, sec_lat);boundImage.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
+
+lay.extent=boundImage;lay.redraw();
+lay.tileSize.w=tempTile_w;lay.tileSize.h=tempTile_h;
+}
+img.onload=function(lay,img,first_long,first_lat,sec_long,sec_lat){
+var first_long=parseFloat(document.getElementById("first_long2").value);
+var first_lat=parseFloat(document.getElementById("first_lat2").value);
+var sec_long=parseFloat(document.getElementById("sec_long2").value);
+var sec_lat=parseFloat(document.getElementById("sec_lat2").value);
+var boundImage=new OpenLayers.Bounds(first_long, first_lat, sec_long, sec_lat);boundImage.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
+lay.extent=boundImage;lay.redraw();
+var can00=document.createElement("canvas");
+
+var newW=(img.height*lay.tileSize.w)/lay.tileSize.h;newSizeW2=newW;
+var newH=(img.width*lay.tileSize.h)/lay.tileSize.w;newSizeH2=newH;
+var ratio=lay.tileSize.w/lay.tileSize.h; newW=ratio*img.height;newH=img.height;
+
+img.width=newW;img.height=newH;
+
+var newSizeH=Math.abs(Math.sin(parseFloat(rotate) * Math.PI/180)*img.width)+Math.abs(Math.sin(parseFloat(90-rotate) * Math.PI/180)*img.height); 
+var newSizeH2=Math.abs(Math.sin(parseFloat(rotate) * Math.PI/180)*lay.tileSize.w)+Math.abs(Math.sin(parseFloat(90-rotate) * Math.PI/180)*lay.tileSize.h); 
+var newSizeW=Math.abs(Math.cos(parseFloat(rotate) * Math.PI/180)*img.width)+Math.abs(Math.cos(parseFloat(90-rotate) * Math.PI/180)*img.height); 
+var newSizeW2=Math.abs(Math.cos(parseFloat(rotate) * Math.PI/180)*lay.tileSize.w)+Math.abs(Math.cos(parseFloat(90-rotate) * Math.PI/180)*lay.tileSize.h);   
+
+var lolat2=new OpenLayers.LonLat(sec_long,sec_lat).transform(new OpenLayers.Projection("EPSG:4326"),map.getProjectionObject());
+var lolat1=new OpenLayers.LonLat(first_long,first_lat).transform(new OpenLayers.Projection("EPSG:4326"),map.getProjectionObject());
+var pix1=map.getPixelFromLonLat(lolat1);var pix2=map.getPixelFromLonLat(lolat2);
+var centX=parseFloat(pix1.x)+parseFloat((pix2.x-pix1.x)/2); var centY=parseFloat(pix1.y)-parseFloat((pix1.y-pix2.y)/2);
+
+var newYleft=centY+parseFloat(newSizeH2/2);var newXleft=centX-parseFloat(newSizeW2/2);
+var newXright=centX+parseFloat(newSizeW2/2);var newYright=centY-parseFloat(newSizeH2/2);
+
+var lonlatn2=map.getLonLatFromPixel({x:newXright,y:newYright}).transform(map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
+var lonlatn1=map.getLonLatFromPixel({x:newXleft,y:newYleft}).transform(map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
+if(document.getElementById("BoundIm_rotate_check").checked==false)
+{document.getElementById("sec_long2").value=lonlatn2.lon;
+document.getElementById("sec_lat2").value=lonlatn2.lat;
+document.getElementById("first_long2").value=lonlatn1.lon;;
+document.getElementById("first_lat2").value=lonlatn1.lat;;}
+
+var first_long=parseFloat(document.getElementById("first_long2").value);
+var first_lat=parseFloat(document.getElementById("first_lat2").value);
+var sec_long=parseFloat(document.getElementById("sec_long2").value);
+var sec_lat=parseFloat(document.getElementById("sec_lat2").value);
+var boundImage=new OpenLayers.Bounds(first_long, first_lat, sec_long, sec_lat);
+ boundImage.transform(new OpenLayers.Projection("EPSG:4326"), map.getProjectionObject());
+
+can00.width=newSizeW;can00.height=newSizeH;
+var ctx00 = can00.getContext("2d");ctx00.translate(can00.width/2, can00.height/2);
+ctx00.rotate(parseFloat(rotate) * Math.PI / 180);//img.width=newW;img.height=newH;
+try{ctx00.drawImage(img, -newW/2, -newH/2,newW,newH);
+lay.url=can00.toDataURL();rtt=lay;lay.extent=boundImage;
+lay.redraw();
+}catch(e){alert(e+" Для поворота изображения его необходимо сохранить на локальном диске, т. е. изображение не должно быть создано на основе URL ссылки");return;}
+}(lay,img,first_long,first_lat,sec_long,sec_lat) 
+/*else{
+ // Code for Chrome, Safari, Opera
+    map.layers[i].div.childNodes[0].style.WebkitTransformOrigin = "50 50";
+    // Code for IE9
+ map.layers[i].div.childNodes[0].style.msTransformOrigin = "50 50";
+ map.layers[i].div.childNodes[0].style.transformOrigin = "50 50";
+map.layers[i].div.childNodes[0].style.transform="rotate("+rotate+"deg)";
+map.layers[i].div.childNodes[0].style.WebkitTransform="rotate("+rotate+"deg)";
+map.layers[i].div.childNodes[0].style.msTransform="rotate("+rotate+"deg)";
+}*/
+}
+else
+{
+map.layers[i].extent=boundImage;map.layers[i].redraw();}
 if(map.layers[i].CLASS_NAME=="OpenLayers.Layer.Image"){map.layers[i].div.childNodes[0].style.display="block";}
-}
-}
+} }
 }
 function ChangeBoundImageSel()
 {
 for(var i=0;i<map.layers.length;i++)
 {
-if(map.layers[i].name==document.getElementById("ImageLayerBound_id").value)
+if(map.layers[i].name==document.getElementById("ImageLayerBound_id").value&&map.layers[i].CLASS_NAME=="OpenLayers.Layer.Image")
 {var oldBoundImage=map.layers[i].extent.clone();
 oldBoundImage.transform(map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
-rtt=oldBoundImage;
 document.getElementById("first_long2").value=oldBoundImage.left;
 document.getElementById("first_lat2").value=oldBoundImage.bottom;
 document.getElementById("sec_long2").value=oldBoundImage.right;
 document.getElementById("sec_lat2").value=oldBoundImage.top;
-}
-}
+var first_long=parseFloat(document.getElementById("first_long2").value);
+var first_lat=parseFloat(document.getElementById("first_lat2").value);
+var sec_long=parseFloat(document.getElementById("sec_long2").value);
+var sec_lat=parseFloat(document.getElementById("sec_lat2").value);
+var lay=map.layers[i];
+if(!lay.initialImage)
+{lay.initialImage=lay.url;lay.initialtileH=lay.tileSize.h;lay.initialtileW=lay.tileSize.w; lay.initialCoords=first_long+';'+first_lat+';'+sec_long+';'+sec_lat}
+} }
 }
 function OK_ImageAnalysis()
 {
@@ -8010,9 +8257,10 @@ DivEditeLeg.innerHTML='<div id="id_divImageLeg" style="background:#ffffff; color
 '.<input title="координата нижнего левого угла" type="text" size="8" id="first_lat2" value="0"/>нижняя левая широта<br>'+
 '.<input title="координата верхнего правого угла" type="text" size="8" id="sec_long2" value="0"/>верхняя правая долгота<br>'+
 '.<input title="координата верхнего правого угла" type="text" size="8" id="sec_lat2" value="0"/>верхняя правая широта<br>'+
+'вращать <input title="" type="text" size="3" id="id_rotate_img" value="0"/> угол (град.)<input type="checkbox" id="BoundIm_rotate_check" value="checkbox"  title=""/><a style="font-size: 11px;">вращать в указанных координатах</a><br>'+
 '<p> <button type=button onclick=OK_BoundImage2()>OK</button></p>'+
 '<p> <button type=button title="Редактировать мышью - касанием и перемещением.После нажатия кнопки /Редактировать мышью/ для перетаскивания картинки в любое место карты вы должны щелкнуть (левой клавишей мыши) один раз по соответствующей картинке, после этого за перемещающимся курсором будет двигаться картинка, после  перенесения её в необходимое место нужно щёлкнуть ещё раз и перемещение закончится. Для изменения границ картинки (растяжения и сужения) нужно подвести курсор мыши к интересующему краю, при этом курсор изменит свой вид и после изменения вида курсора начать его двигать. При этом если подвели к правому краю, то в зависимости от направления движения картинка будет либо уменьшаться, либо увеличиваться по ширине. Если подвели к нижнему краю, то в зависимости от направления движения картинка будет либо уменьшаться, либо увеличиваться по высоте. Если подвели к левому краю, то картинка будет только увеличиваться по ширине вправо, если подвели к верхнему краю, то картинка будет только увеличиваться по высоте вниз. Во всех перечисленных случаях во время перемещения курсора происходит автоматическое изменение значений координат в полях ввода, соответствующее текущему положению и размеру картинки.Важно: для использования этой функции все векторные слои, лежащие выше слоя изображения, должны быть отключены, т.е. убрана галочка напротив них в списке слоёв карты." onclick=OK_BoundImage3()>Редактировать мышью</button></p>'+
-'<p> <button type=button title="Отключить редактирование мышью - касанием и перемещением" onclick=OK_BoundImage4()>Stop редактирование мышью</button></p></div>';
+'<p> <button type=button title="Отключить редактирование мышью - касанием и перемещением" onclick=OK_BoundImage4()>Stop редактирование мышью</button></p><p> <button id=undoBoundImage type=button onclick=OK_BoundImageUnDo()>Отменить всё</button></p></div>';
 
 if(!document.getElementById("id_divImageLeg"))
 {body.appendChild(DivEditeLeg); }
@@ -12179,7 +12427,7 @@ var dopstry='onclick=clickDivColor3d(this) style="float:right;width:15px;height:
 DivEditeLeg.innerHTML='<div id="id_divHtmpowg_Leg" style="background:#ffffff; color:#0000ff;z-index: 1400;position:absolute;left:'+Math.round(leftLeft+50)+'px;top:'+Math.round(topTop-180)+
 'px;overflow:hidden; border: 1px solid black;"><img onclick="closeWearherLegendWin(this)" src="openlayers/theme/default/img/close.gif" style="position:relative; top:10px;float:right; cursor:pointer"><a style="position:relative; top:20px"></a>'+
 '<a style="font-size: 9px;"> you can move this window if you select menu item Interface/switch to interface drag</a><br>'+
-'set Radius:<input type="text" size="3" id="Id_radHeatowgLayerNameAtl" title="set radius in pixels" value="10"/>'+
+'Радиус:<input type="text" size="3" id="Id_radHeatowgLayerNameAtl" title="set radius in pixels" value="10"/>'+
 'set Radius blur:<input type="text" size="3" id="Id_blurHeatowgLayerNameAtl" title="set radius in pixels" value="10"/><br>'+
 '<a>Field for heatmap:</a>'+
 '<select id="htmpselectatrowg_id" >'+ '<option selected value="0">.</option>'+
@@ -12421,23 +12669,26 @@ DivEditeLeg.style.position="relative";
 var dopstry='onclick=clickDivColor3d(this) style="float:right;width:25px;height: 10px; border: 1px double black;cursor:pointer;background:';
 DivEditeLeg.innerHTML='<div id="id_divIDWmpowg_Leg" style="background:#ffffff; color:#0000ff;z-index: 1400;position:absolute;left:'+Math.round(leftLeft+50)+'px;top:'+Math.round(topTop-150)+
 'px;overflow:hidden; border: 1px solid black;"><img onclick="closeWearherLegendWin(this)" src="openlayers/theme/default/img/close.gif" style="position:relative; top:10px;float:right; cursor:pointer"><a style="position:relative; top:20px"></a>'+
-'<a style="font-size: 9px;"> you can move this window if you select menu item Interface/switch to interface drag</a><br>'+
-'set Radius:<input type="text" size="3" id="Id_radIDWowgLayerNameAtl" title="set radius in pixels" value="30"/>power parameter p:<input type="text" size="3" id="Id_pIDWowgLayerNameAtl" title="set power parameter, such as: 1,2,3,4,5..." value="2"/><br>'+
-'smoothing parameter<input type="text" size="3" id="Id_smootIDWowgLayerNameAtl" title="set radius in pixels" value="0"/>'+
-'opacity:<input type="text" size="3" id="Id_opIDWowgLayerNameAtl" title="set from 0 to 1" value="0.6"/><br>'+
-'<a>Field for IDW:</a>'+
+'<a style="font-size: 9px;">Вы можете перемещать это окно если щёлкните по пункту меню: Интерфейс->переключить режим интерфейса</a><br>'+
+'<input type="checkbox" id="IDW_radTypeP" checked value="checkbox"  title="set radius in pixels"/>установить радиус в пикселях<input type="checkbox" id="IDW_radTypeM" value="checkbox" title="set radius in meters"/>установить радиус в метрах<a style="font-size: 9px;">(очень медленно!)</a><br>'+
+'Радиус:<input type="text" size="3" id="Id_radIDWowgLayerNameAtl" title="set radius in pixels" value="30"/>power параметр p:<input type="text" size="3" id="Id_pIDWowgLayerNameAtl" title="set power parameter, such as: 1,2,3,4,5..." value="2"/><br>'+
+'параметр сглаживания<input type="text" size="3" id="Id_smootIDWowgLayerNameAtl" title="set radius in pixels" value="0"/>'+
+'прозрачность:<input type="text" size="3" id="Id_opIDWowgLayerNameAtl" title="set from 0 to 1" value="0.6"/><br>'+
+'<a>Поле для интерполяции:</a>'+
 '<select id="IDWselectatrowg_id" >'+ '<option selected value="0">.</option>'+
 '</select><br>'+
-'name of result Layer:<input type="text" size="25" id="Id_IDWowgLayerNameAtl_Name" value="IDW_'+edilayerMainLayer.name+'"/><br>'+
-'get vector Layer<input type="checkbox" id="Id_IDWowgLayerNameVect_check" /><br><a style="font-size: 10px;">name of Vector Layer:</a><input type="text" size="20" id="Id_IDWowgLayerNameVect_name" value="vector_'+edilayerMainLayer.name+'"/><br>'+
-'<a style="font-size: 10px;">interval for vector Layer by deg</a><input type="text" size="5" id="Id_IDWowgLayerNameAtl_inerval" value="0.5"/><a style="font-size: 10px;">or by pixels</a><input type="text" size="5" id="Id_IDWowgLayerNamePix_inerval" value="0"/><br>'+
-'Set color:<br>set gradient from to:<div id="color2idwtmp" '+dopstry+'#FF0000"></div><div id="color1idwtmp" '+dopstry+'#0000FF"></div><br>'+
-'or set number of classification:<select id=Id_coloIDWClass onchange="ChangeIDWclassification()">'+
+'название слоя:<input type="text" size="25" id="Id_IDWowgLayerNameAtl_Name" value="IDW_'+edilayerMainLayer.name+'"/><br>'+
+'получить векторный слой<input type="checkbox" id="Id_IDWowgLayerNameVect_check" /><br><a style="font-size: 10px;">name of Vector Layer:</a><input type="text" size="20" id="Id_IDWowgLayerNameVect_name" value="vector_'+edilayerMainLayer.name+'"/><br>'+
+'<a style="font-size: 10px;">интервал для векторного слоя в град.</a><input type="text" size="5" id="Id_IDWowgLayerNameAtl_inerval" value="0.5"/><a style="font-size: 10px;">или в пикселях</a><input type="text" size="5" id="Id_IDWowgLayerNamePix_inerval" value="0"/><br>'+
+'Цвет:<br>установить градиент от...до..:<div id="color2idwtmp" '+dopstry+'#FF0000"></div><div id="color1idwtmp" '+dopstry+'#0000FF"></div><br>'+
+'или установите число классов:<select id=Id_coloIDWClass onchange="ChangeIDWclassification()">'+
 '</select><br><div id="id_ChangeIDWbutton"></div>'+
-'<input type="checkbox" id="IDW_export_interp" value="checkbox"/>Export in arcgrid format; no data value:<input type="text" size="5" id="Id_noIDWowgLayerName_val" value="-9999"/><br>'+
-'limiting polygon<select id=interpIDW_limit >'+
+'<input type="checkbox" id="IDW_export_interp" value="checkbox"/>Экспорт а arcgrid формат; no data value:<input type="text" size="5" id="Id_noIDWowgLayerName_val" value="-9999"/><br>'+
+'ограничивающий полигон<select id=interpIDW_limit >'+
  '<option selected value="0">.</option>'+
-'</select><br><div id="global_sum_IDW"></div><br>'+
+'</select><br>'+
+'<input type="checkbox" id="IDW_squareCalc_interp" value="checkbox"/>Расчёт по площади'+
+'<div id="global_sum_IDW"></div><br>'+
 '<p> <button id="okIDWOWG_id" type=button onclick=IDWCanvas2()>OK</button></p>'
 '</div>';
 if(!document.getElementById("id_IDWOWGLegMain2"))
@@ -12458,8 +12709,29 @@ for (var il=0; il<map.layers.length;il++)
  document.getElementById("interpIDW_limit").appendChild(t); }}
 }
 }
+function calcSquareForIDW()
+{
+var georef=map.calculateBounds();
+georef.transform(map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
+var R = 6372795;var lat1=georef.bottom;var lat2=georef.top;var long1=georef.left;var long2=georef.right;
+lat1 *= Math.PI / 180;lat2 *= Math.PI / 180;long1 *= Math.PI / 180;long2 *= Math.PI / 180;
+var cl1 = Math.cos(lat1);var cl2 = Math.cos(lat2);var sl1 = Math.sin(lat1);var sl2 = Math.sin(lat2);
+var delta = long2 - long1;var cdelta = Math.cos(delta);var sdelta = Math.sin(delta);var y = Math.sqrt(Math.pow(cl2 * sdelta, 2) + Math.pow(cl1 * sl2 - sl1 * cl2 * cdelta, 2));
+var x = sl1 * sl2 + cl1 * cl2 * cdelta;var ad = Math.atan2(y, x);var distY = ad * R;var lat1=georef.top;var lat2=georef.top;var long1=georef.left;var long2=georef.right;
+lat1 *= Math.PI / 180;lat2 *= Math.PI / 180;long1 *= Math.PI / 180;long2 *= Math.PI / 180;var cl1 = Math.cos(lat1);var cl2 = Math.cos(lat2);var sl1 = Math.sin(lat1);var sl2 = Math.sin(lat2);var delta = long2 - long1;var cdelta = Math.cos(delta);var sdelta = Math.sin(delta);
+var y = Math.sqrt(Math.pow(cl2 * sdelta, 2) + Math.pow(cl1 * sl2 - sl1 * cl2 * cdelta, 2));var x = sl1 * sl2 + cl1 * cl2 * cdelta;var ad = Math.atan2(y, x);
+var distX = ad * R;var masY=distY/map.size.h;var masX=distX/map.size.w; var result=masX+";"+masY;
+return result;
+}
 function IDWCanvas2(zoomIDW)
-{ var exprtV=0;
+{ 
+if(document.getElementById("IDW_radTypeP")&&document.getElementById("IDW_radTypeP").checked==true&&document.getElementById("IDW_radTypeM").checked==true)
+{alert("Выберите один из типов радиуса: в пикселях ИЛИ в метрах"); return;}
+if(document.getElementById("IDW_radTypeP")&&document.getElementById("IDW_radTypeP").checked==false&&document.getElementById("IDW_radTypeM").checked==false)
+{alert("Выберите один из типов радиуса: в пикселях ИЛИ в метрах"); return;}
+var exprtV=0;
+if(document.getElementById("IDW_squareCalc_interp")&&document.getElementById("IDW_squareCalc_interp").checked==true)
+{var Sqpix=calcSquareForIDW();}
 if(document.getElementById("Id_IDWowgLayerNameVect_check")&&document.getElementById("Id_IDWowgLayerNameVect_check").checked==true)
 {exprtV=1;var new_layer_Vector=new OpenLayers.Layer.Vector(document.getElementById("Id_IDWowgLayerNameVect_name").value,{renderers:["Canvas", "SVG", "VML"]});var arrFeaturest=[];
 var georef=map.calculateBounds();
@@ -12497,6 +12769,7 @@ if(interlim1==1)
 else
 {new_layer_Heat.featuresIn.splice(i,1);i--;}}
 } 
+var typeRad=1; if(document.getElementById("IDW_radTypeP").checked==true){typeRad=1;}if(document.getElementById("IDW_radTypeM").checked==true){typeRad=2;}
 new_layer_Heat.idwmapparams={attribute:document.getElementById("IDWselectatrowg_id").value,radius:parseFloat(document.getElementById("Id_radIDWowgLayerNameAtl").value),
 p:parseFloat(document.getElementById("Id_pIDWowgLayerNameAtl").value),opacity:parseFloat(document.getElementById("Id_opIDWowgLayerNameAtl").value),smooth:parseFloat(document.getElementById("Id_smootIDWowgLayerNameAtl").value)}
 new_layer_Heat.idwmapparams.color1='';new_layer_Heat.idwmapparams.color2='';
@@ -12564,8 +12837,24 @@ var global_sum=0;var countIDW=0;var squaredVal1=0;
  {
  var dx = data[k][1] - (i); var dy = data[k][0] - (j);
 //var dk = Math.sqrt(Math.pow(dx,2) + Math.pow(dy,2));
-var dk = (dx*dx + dy*dy);
-if(dk<(rad*rad)){indrad=1;}
+if(!new_layer_Heat.idwmapparams.typeRad){new_layer_Heat.idwmapparams.typeRad=1}
+if(new_layer_Heat.idwmapparams.typeRad==1)
+{var dk = (dx*dx + dy*dy); if(dk<=(rad*rad)){indrad=1;}}
+if(new_layer_Heat.idwmapparams.typeRad==2)
+{var pointListm=[]
+var ext1m = new OpenLayers.Pixel(data[k][1], data[k][0]);var new_pos1m = map.getLonLatFromPixel(ext1m);
+var pointsm=new OpenLayers.Geometry.Point(new_pos1m.lon, new_pos1m.lat);
+pointListm.push(pointsm);
+var ext2m = new OpenLayers.Pixel(i, j);var new_pos2m = map.getLonLatFromPixel(ext2m);
+var points2m=new OpenLayers.Geometry.Point(new_pos2m.lon, new_pos2m.lat);
+pointListm.push(points2m);
+ var linem = new OpenLayers.Geometry.LineString(pointListm); 
+var LengthP=linem.clone().transform(map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
+var lenMetrs=LengthP.getGeodesicLength(new OpenLayers.Projection("EPSG:4326"));
+if(lenMetrs<=rad){indrad=1;console.log(lenMetrs); }
+
+dk=lenMetrs*lenMetrs;
+}
 
 if(indrad==1)
 { //dk = Math.pow((dk),0.5);
@@ -12676,8 +12965,18 @@ kmlText2=dops+strforexport; myWinExport= open("download.html", "Export arcgrid",
 var end =  performance.now()  // log end timestamp
 var diff = end - start;console.log("time1:"+diff);
 if(document.getElementById("global_sum_IDW")){var avr=global_sum/countIDW;
-var variance=(squaredVal1/countIDW)-(avr*avr);
-document.getElementById("global_sum_IDW").innerHTML="Sum:"+global_sum+",<br> Count: "+countIDW+"<br> Mean: "+avr+"<br> Variance: "+variance+"<br> Standard Deviation: "+Math.sqrt(variance);}
+var variance=(squaredVal1/countIDW)-(avr*avr); var addSQp='';
+if(document.getElementById("IDW_squareCalc_interp")&&document.getElementById("IDW_squareCalc_interp").checked==true)
+{ var xp=Sqpix.split(";")[0]; var yp=Sqpix.split(";")[1]; var Spixel=xp*yp; var SumSq=global_sum*Spixel; var Sfull=countIDW*Spixel;addSQp='<br><a style="font-size: 11px;">Площадь S1 (посчитанная по пикселям):'+Sfull+'<br> Сумма по площади S1:'+SumSq
+if(document.getElementById("interpIDW_limit")&&document.getElementById("interpIDW_limit").value!=="0")
+{
+
+var areaP=new_layer_Heat.featuresLim[0].clone().geometry.transform(map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
+var areae=areaP.getGeodesicArea(new OpenLayers.Projection("EPSG:4326"));
+addSQp+='<br><a style="font-size: 11px;">Площадь ограничивающего полигона S2 (геодезический расчёт):'+areae+''+
+'<br><a style="font-size: 11px;">Сумма по площади S2:'+global_sum*(areae/countIDW)+'<br>'
+}   }
+document.getElementById("global_sum_IDW").innerHTML="Сумма:"+global_sum+",<br> Количество точек: "+countIDW+"<br> Среднее: "+avr+"<br> Дисперсия: "+variance+"<br> Станд_отклонение: "+Math.sqrt(variance)+addSQp;} 
 if(zoomIDW==0)
 {map.addLayer(new_layer_Heat);}
 else{new_layer_Heat.div.removeChild(zoomIDW.div.childNodes[0]);}
@@ -24711,7 +25010,7 @@ function colorEdit(obj){ colorWin= open("color.htm", "Edit Color interface",
 <a href="#" onclick="New_LayerGPX();"><div title="Создать и добавить новый слой из GPX файла. Данные с GPS прибора" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Новый слой из GPX файла</div></div></a>
 <a href="#" onclick="New_LayerKML();"><div title="Создать и добавить новый слой из KML файла" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Новый слой из KML файла</div></div></a>
 <a href="#" onclick="New_LayerWMS();"><div title="Создать и добавить новый слой из WMS URL" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Новый слой из WMS url</div></div></a>
-
+<a href="#" onclick="New_LayerWMTS();"><div title="Create and add new Layer from Web Map Tile Service (WMTS) URL" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Новый слой из тайла WMTS url</div></div></a>
 <a href="#" onclick="New_LayerFileUrl();"><div title="Создать и добавить новый слой из URL файла. Введит url адрес файла. Например: http://host.com/data.kml" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Новый слой из url файла</div></div></a>
 
 <a href="#" onclick="New_LayerImage();"><div title="Создать и добавить новый слой из изоражения (png,gif,jpeg)" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Новый слой из изображения</div></div></a>
