@@ -639,6 +639,7 @@ file3dSky=[];
 
 var globalVarOfflineRecMap=false;
 var globalVarOfflineMapOn=false;
+ var varCopySelFeature='';
 var wps = "/geoserver/wps",
  capabilities,
  process;
@@ -3300,6 +3301,73 @@ function OptionDistMeas()
 {if(document.getElementById("DistMeasureGisaDiv_id").style.display=="block")
 {document.getElementById("DistMeasureGisaDiv_id").style.display="none";}
 else{document.getElementById("DistMeasureGisaDiv_id").style.display="block";}}
+function Export_Layer_WKTCSV()
+{
+if(document.getElementById("editL1").value=="0")
+{alert ("Select Layer name in the list 'Editable Layer'"); return;}
+
+if(document.getElementById("editL1").value=="0")
+{alert ("Select Layer name in the list 'Editable Layer'"); return;}
+htmlCSV='';
+if(!document.getElementById("PopupWKTCSVExport"))
+{htmlCSV+='<a>Select parameters of the csv file:</a><br>'+
+//'<input type="text" size="6" id="id_CSVlonGw" value="longitude"/>name of the longitude field<br>'+
+//'<input type="text" size="6" id="id_CSVlatGw" value="latitude"/>name of the latitude field<br>'+
+'<input type="text" size="6" id="id_CSVGeomGw" value="WKT"/>name of the <a href="https://en.wikipedia.org/wiki/Well-known_text" >WKT</a> geometry field<br>'+
+'<select id=TypeSeparate_idCSVw>'+
+'<option selected value=";">; semicolon</option>'+
+'<option selected value=",">, comma</option>'+
+'</select>Please select separation symbol in CSV file<br>'+
+'or insert any other symbol:<br>'+
+'<input type="text" size="3" id="id_CSVGeomGwSep" value=""/>'+
+'<p> <button type=button onclick=Export_Layer_WKTCSV_OK()>OK</button></p>';
+popup_new_ExpWKTCSV = new OpenLayers.Popup.FramedCloud("PopupWKTCSVExport",
+ map.getCenter(),
+ new OpenLayers.Size(400,400),
+ htmlCSV , null, true, onPopupClose);
+ map.addPopup(popup_new_ExpWKTCSV);
+ popup_new_ExpWKTCSV.updateSize();}
+document.getElementById("PopupWKTCSVExport").onmousedown=function(event){drags(event)};
+document.getElementById("PopupWKTCSVExport").onmouseup=function(e){enddrag()};
+
+}
+function Export_Layer_WKTCSV_OK()
+{
+
+var fieldsArr=[document.getElementById("id_CSVGeomGw").value];
+var csvArray=[];
+for(var key in edilayerMainLayer.features[0].attributes)
+{fieldsArr.push(key);}
+csvArray.push(fieldsArr);
+rtt=csvArray;
+for(var i=0;i<edilayerMainLayer.features.length;i++)
+{var featWKT1=edilayerMainLayer.features[i].clone();featWKT1.geometry.transform(map.getProjectionObject(),new OpenLayers.Projection("EPSG:4326"));
+var featWKT = new OpenLayers.Format.WKT().write(featWKT1)
+var attr=[];attr.push(featWKT);
+
+//rtt=xy;
+
+
+for(var key in edilayerMainLayer.features[i].attributes)
+{attr.push(edilayerMainLayer.features[i].attributes[key])
+
+}
+
+rtt=attr;
+//alert(xy[0]+" ,"+xy[1])
+var datastr='';
+var datastr2='';
+csvArray.push(attr);
+}
+rtt=csvArray;
+for(var g=0;g<csvArray.length;g++)
+{var sepsymb='';if(document.getElementById("id_CSVGeomGwSep").value!==""){sepsymb=document.getElementById("id_CSVGeomGwSep").value}else{sepsymb=document.getElementById("TypeSeparate_idCSVw").value}
+datastr = csvArray[g].join(sepsymb)+ "\n";datastr2+=datastr;
+}
+popup_new_ExpWKTCSV.destroy();
+kmlText2=datastr2;
+var myWinExport= open("download.html", "Export to csv","width=900,height=500,status=no,toolbar=no,menubar=no,scrollbars=yes");myWinExport.focus();
+}
 function Export_Layer_CSV()
 {if(document.getElementById("editL1").value=="0")
 {alert ("Выберите название слоя в списке 'Редактируемый слой'"); return;}
@@ -7457,6 +7525,8 @@ function readSingleFile(evt)
 fileZIP = evt.target.files[0]; 
 rtt=document.getElementById('file_id');
 }
+function readSingleFileCSVWKT(evt)
+{fileZIP = evt.target.files[0]; }
 function readSingleFileTXT(evt)
 {
 fileZIP = evt.target.files[0]; 
@@ -9927,6 +9997,135 @@ saveStrategy.save();
 saveStrategy.onCommit=function(){};
 
 }
+function New_LayerWKTCSV()
+{
+var htmlLayerTXT='';
+htmlLayerTXT+='<a>Please select file:</a><br>'+
+ '<input title="Select text file" type="file" id="file_idCSVWKT"><br>'+
+'<p> <button type=button onclick=OK_fileCSVWKT()>OK</button></p>';
+popup_new_fileCSVWKT = new OpenLayers.Popup.FramedCloud("NewFilePopupCSVWKT",
+ map.getCenter(), new OpenLayers.Size(400,400), htmlLayerTXT , null, true, onPopupClose);
+ map.addPopup(popup_new_fileCSVWKT);
+document.getElementById('file_idCSVWKT').addEventListener('change', readSingleFileCSVWKT, false);
+
+}
+function OK_fileCSVWKT()
+{
+var htmlTextSep='';
+htmlTextSep+='<a>Please select separation symbol in CSV file :</a><br>'+
+ '<select id="sepTXTcsvw_id"> '+ '<option selected value=";">; semicolon</option>'+
+'<option selected value=",">, comma</option>'+'</select><br>'+
+'or insert any other symbol:<br>'+
+'<input type="text" size="3" id="sepTXTcsvw_idSep" value=""/>'+
+'<input type="checkbox" id="Id_KavikIsInFileWebw" value="checkbox"/>click if field contains inverted commas<br>'+
+'<p> <button type=button onclick=OK_fileCSVWKT2()>OK</button></p>';
+popup_new_SepSymCSVWKT = new OpenLayers.Popup.FramedCloud("SepSymPopupCSVWKT",
+ map.getCenter(), new OpenLayers.Size(400,400), htmlTextSep , null, true, onPopupClose);
+ map.addPopup(popup_new_SepSymCSVWKT);
+}
+function OK_fileCSVWKT2()
+{var SepSym='';if(document.getElementById("sepTXTcsvw_idSep").value!==""){SepSym=document.getElementById("sepTXTcsvw_idSep").value}
+else{ SepSym=document.getElementById("sepTXTcsvw_id").value;}
+var checkPop=document.getElementById("Id_KavikIsInFileWebw").checked;
+popup_new_SepSymCSVWKT.destroy();
+var lines = [];
+var headers;
+ if (fileZIP) {
+ var r = new FileReader();
+ r.onload = function(e) { 
+ var contents = e.target.result;
+var allTextLines = contents.split(/\r\n|\n/);
+ headers = allTextLines[0].split(SepSym);
+ for (var i=1; i<allTextLines.length; i++) {
+if(checkPop==true)
+{var dataS = allTextLines[i].split('"');
+if(dataS[1]){var c=dataS[1].replace(/,/g,'a;=;a');
+var dataSS=dataS[0]+c+dataS[2];}
+if(dataS[1])
+{var data = dataSS.split(SepSym);}
+else{var data = allTextLines[i].split(SepSym);}
+}
+else
+{ var data = allTextLines[i].split(SepSym);}
+ if (data.length == headers.length) {
+ var tarr = []; 
+ for (var j=0; j<headers.length; j++) {
+tarr.push(headers[j]+"_:_"+data[j].replace(/a;=;a/g,','));
+ }
+ lines.push(tarr); contentsTXTfile=lines; 
+ } }
+
+if(NewFilePopupCSVWKT){popup_new_fileCSVWKT.destroy(); }
+
+var htmlTextLonLat='';
+htmlTextLonLat+=/*'<a>Please select longitude:</a><br>'+
+ '<select id="longTXTw_id"> '+ '<option selected value="0">.</option>'+'</select><br>'+'<a>Please select latitude:</a><br>'+ '<select id="latTXTw_id"> '+ '<option selected value="0">.</option>'+'</select><br>'+*/
+'<a>Please select field with WKT geometry :</a><br>'+
+ '<select id="sepTXTcsvwg_id"> '+ '<option selected value="0">.</option>'+
+'</select><br>'+
+'<p> <button type=button onclick=OK_LonLatCSVWKT()>OK</button></p>';
+popup_LonLatCSVWKT = new OpenLayers.Popup.FramedCloud("NewLonLatCSVWKT",
+ map.getCenter(), new OpenLayers.Size(400,400), htmlTextLonLat , null, true, onPopupClose); map.addPopup(popup_LonLatCSVWKT);
+ /*for(var ab = 0; ab < headers.length; ab++ )
+{var t=document.createElement('option');t.value=headers[ab];t.text=headers[ab];document.getElementById("longTXTw_id").appendChild(t);}
+ for(var ab = 0; ab < headers.length; ab++ )
+{var t=document.createElement('option');t.value=headers[ab];t.text=headers[ab];document.getElementById("latTXTw_id").appendChild(t);}*/
+ for(var ab = 0; ab < headers.length; ab++ )
+{var t=document.createElement('option');
+t.value=headers[ab];t.text=headers[ab];document.getElementById("sepTXTcsvwg_id").appendChild(t);}
+popup_LonLatCSVWKT.updateSize();
+document.getElementById("NewLonLatCSVWKT").onmousedown=function(event){drags(event)};
+document.getElementById("NewLonLatCSVWKT").onmouseup=function(e){enddrag()};
+ }
+ r.readAsText(fileZIP);
+ } else { 
+ alert("Failed to load file");
+ }
+}
+function OK_LonLatCSVWKT()
+{
+rtt=contentsTXTfile; 
+var new_layer_TXT = new OpenLayers.Layer.Vector(fileZIP.name.split('.')[0],{renderers:["Canvas", "SVG", "VML"]});
+new_layer_TXT.projection=new OpenLayers.Projection("EPSG:900913");
+ for(var ab = 0; ab < contentsTXTfile.length; ab++ )
+{var g; 
+for(var a = 0; a < contentsTXTfile[ab].length; a++ )
+{ if (document.getElementById("sepTXTcsvwg_id").value==contentsTXTfile[ab][a].split('_:_')[0])
+{g=contentsTXTfile[ab][a].split('_:_')[1];
+var feat= new OpenLayers.Format.WKT().read(g);
+
+
+} }
+feat.geometry.transform(new OpenLayers.Projection("EPSG:4326"),map.getProjectionObject());
+
+
+for(var a = 0; a < contentsTXTfile[ab].length; a++ )
+{
+ if (document.getElementById("sepTXTcsvwg_id").value!=contentsTXTfile[ab][a].split('_:_')[0])
+feat.attributes[contentsTXTfile[ab][a].split('_:_')[0]]=contentsTXTfile[ab][a].split('_:_')[1];  
+}
+//first_point.fid=new_layer_TXT.name+"."+ab;
+new_layer_TXT.addFeatures(feat);
+}
+var new_style_layer= new OpenLayers.Style({
+ pointRadius: 3, fillColor: "#FF9000",
+ strokeColor: "#FFF000", strokeWidth: 1,
+fillOpacity:1, strokeOpacity:1 });
+ var selStyle = new OpenLayers.Style({
+ pointRadius: 5,  fillColor: "#ffaa00", strokeColor: "#00DDFF", strokeWidth:2,
+fillOpacity:1, strokeOpacity:1 }); 
+new_layer_TXT.styleMap=new OpenLayers.StyleMap({'default':new_style_layer,'select': selStyle});
+map.addLayer(new_layer_TXT);
+var t=this.document.createElement('option');
+t.value=new_layer_TXT.name;
+t.text=new_layer_TXT.name;
+this.document.getElementById("editL1").appendChild(t);
+popup_LonLatCSVWKT.destroy();
+/*var geometryEPSGclone=featureEPSG2[0].geometry.clone();
+var featureEPSGN=geometryEPSGclone.transform(new OpenLayers.Projection("EPSG:4326"), new OpenLayers.Projection(document.getElementById("selEPSG").value));
+featureEPSG2[0].geometry=featureEPSGN;
+ this.value = new OpenLayers.Format.WKT().write(featureEPSG2[0]);*/
+}
 function New_LayerTXT()
 {
 var htmlLayerTXT='';
@@ -10175,6 +10374,80 @@ headers: {
     },
 callback: alert ("it's OK")
 });
+
+}
+function CopySelFeature()
+{
+
+   
+if(this.document.getElementById("editL1").value=="0")
+{ alert ("выберите название слоя в списке 'Редактируемый слой'"); return;} 
+if(edilayerMainLayer.selectedFeatures.length==0){alert ("Пожалуйста, выделите элементы на карте");return;}
+var format = new OpenLayers.Format.GeoJSON({});
+var jsonstringCopy = format.write(edilayerMainLayer.selectedFeatures);
+varCopySelFeature=format.read(jsonstringCopy);
+var c=varCopySelFeature.length; alert(c+" элементов скопировано");
+}
+function PasteSelFeature()
+{if(varCopySelFeature==''){alert("Пожалуйста, выделите и скопируйте элементы на карте");return;}
+var bbox = document.getElementById("map").getBoundingClientRect();
+ var body = document.body; var docElem = document.documentElement; var scrollTop = window.pageYOffset || docElem.scrollTop || body.scrollTop;
+ var scrollLeft = window.pageXOffset || docElem.scrollLeft || body.scrollLeft; var clientTop = docElem.clientTop || body.clientTop || 0; var clientLeft = docElem.clientLeft || body.clientLeft || 0; var topTop = bbox.top + scrollTop - clientTop; var leftLeft = bbox.left + scrollLeft - clientLeft;
+var DivEditeLeg=document.createElement("div");DivEditeLeg.id="PasteSelFeaturePopup";
+DivEditeLeg.className="id_divRoutLegMain";DivEditeLeg.style.position="relative";
+DivEditeLeg.innerHTML='<div id="PasteSelFeaturePopup_Leg" style="background:#ffffff; color:#0000ff;z-index: 1400;position:absolute;left:'+Math.round(leftLeft+50)+'px;top:'+Math.round(topTop-180)+
+'px;overflow:hidden; border: 1px solid black;"><img onclick="closeWearherLegendWin(this)" src="openlayers/theme/default/img/close.gif" style="position:relative; top:10px;float:right; cursor:pointer"><a style="position:relative; top:20px"></a>'+
+'<a style="font-size: 9px;"> Вы можете перемещать это окно если щёлкните по пункту меню: Интерфейс->переключить режим интерфейса</a><br>'+
+'Выберите слой для того, что бы вставить элементы:<br>'+
+'<select id="PasteSelFeatureSelLay" >'+
+ '<option selected value="0"></option></select>'+
+ '<p> <button type=button onclick= PasteSelFeature_OK()>OK</button></p>'+
+'</div>';
+
+if(!document.getElementById("PasteSelFeaturePopup"))
+{body.appendChild(DivEditeLeg); 
+document.getElementById("PasteSelFeaturePopup").onmousedown=function(event){drags(event)};
+document.getElementById("PasteSelFeaturePopup").onmouseup=function(e){enddrag()};
+for (var i=0;i<map.layers.length;i++)
+{
+if (map.layers[i].CLASS_NAME=="OpenLayers.Layer.Vector")
+{var t=document.createElement('option'); t.value=map.layers[i].name; t.text=map.layers[i].name;
+ document.getElementById("PasteSelFeatureSelLay").appendChild(t);} } }
+
+
+
+}
+function PasteSelFeature_OK()
+{var arfeatAtrr={};
+for (var i=0;i<map.layers.length;i++)
+{
+if (map.layers[i].CLASS_NAME=="OpenLayers.Layer.Vector"&&map.layers[i].name==document.getElementById("PasteSelFeatureSelLay").value)
+{   
+for(h in  map.layers[i].features[0].attributes)
+{ 
+for (var ii=0;ii<varCopySelFeature.length;ii++)
+{var objnew={};for(hh in varCopySelFeature[ii].attributes){if(hh==h){}else{if(varCopySelFeature[ii].attributes[h]){}else{objnew[h]='';varCopySelFeature[ii].attributes[h]=''} } } 
+for (tt in varCopySelFeature[ii].attributes){objnew[tt]=varCopySelFeature[ii].attributes[tt]}
+varCopySelFeature[ii].attributes=objnew;
+} } 
+
+ rtt=arfeatAtrr; 
+
+map.layers[i].addFeatures(varCopySelFeature);
+for (var s=0;s<map.layers[i].features.length;s++)
+{for(h in varCopySelFeature[0].attributes)
+{
+for(hh in map.layers[i].features[s].attributes){if(hh==h){}
+else{if(map.layers[i].features[s].attributes[h]){}else{map.layers[i].features[s].attributes[h]=''};} 
+
+}
+}
+ }
+alert("All done");
+}
+
+}
+
 
 }
 function UploadFileAsc()
@@ -25495,6 +25768,7 @@ function colorEdit(obj){ colorWin= open("color.htm", "Edit Color interface",
 <a href="#" onclick="New_LayerJSON();"><div title="Создать и добавить новый слой из JSON файла" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Новый слой из JSON файла</div></div></a>
 <a href="#" onclick="New_LayerGPX();"><div title="Создать и добавить новый слой из GPX файла. Данные с GPS прибора" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Новый слой из GPX файла</div></div></a>
 <a href="#" onclick="New_LayerKML();"><div title="Создать и добавить новый слой из KML файла" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Новый слой из KML файла</div></div></a>
+<a href="#" onclick="New_LayerWKTCSV();"><div title="Создать и добавить новый слой из CSV with WKT file" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Новый слой из WKT/CSV файла</div></div></a>
 <a href="#" onclick="New_LayerWMS();"><div title="Создать и добавить новый слой из WMS URL" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Новый слой из WMS url</div></div></a>
 <a href="#" onclick="New_LayerWMTS();"><div title="Create and add new Layer from Web Map Tile Service (WMTS) URL" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Новый слой из тайла WMTS url</div></div></a>
 <a href="#" onclick="New_LayerFileUrl();"><div title="Создать и добавить новый слой из URL файла. Введит url адрес файла. Например: http://host.com/data.kml" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Новый слой из url файла</div></div></a>
@@ -25507,6 +25781,7 @@ function colorEdit(obj){ colorWin= open("color.htm", "Edit Color interface",
 <a href="#" onclick="Export_Layer();"><div title="Экспорт слоя в KML format" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Экспорт слоя в KML format</div></div></a>
 <a href="#" onclick="Export_Layer_GML();"><div title="Экспорт слоя в GML format" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Экспорт слоя в GML format</div></div></a>
 <a href="#" onclick="Export_Layer_CSV();"><div title="Экспорт слоя в CSV format" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Экспорт слоя в CSV format</div></div></a>
+<a href="#" onclick="Export_Layer_WKTCSV();"><div title="Экспорт слоя в CSV c WKT format" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Экспорт слоя в WKT/CSV </div></div></a>
 <a href="#" onclick="Export_Layer_JSON();"><div title="Экспорт слоя в JSON format" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Экспорт слоя в JSON format</div></div></a>
 <a href="#" onclick="Export_Layer_Shape();"><div title="Экспорт редактируемого слоя в  shapefile(Шейп-файл). После щелчка по этому пункту меню начнётся закачка архива в формате zip, в котором будут  5 файлов: cst, dbf, prj, shp,shx. Если слой большой - содержит несколько тысяч элементов то возможно придётся подождать некоторое время до начала закачки." class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Экспорт слоя в SHAPEFILE</div></div></a>
 <a href="#" onclick="Export_Layer_GPX();"><div title="Экспорт слоя в GPX format" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Экспорт слоя в GPX format</div></div></a>
@@ -25534,6 +25809,8 @@ function colorEdit(obj){ colorWin= open("color.htm", "Edit Color interface",
 <a href="#" onclick="AddAttribute();"><div title="добавить атрибут в редактируемый слой" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Добавить атрибут в слой</div></div></a>
 <a href="#" onclick="DelAttribute();"><div title="Внимание: если вы удалите любой атрибут, результат не будет сохранен в shapefile" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Удалить атрибут из слоя</div></div></a>
 <a href="#" onclick="UploadFile();"><div title="выберите shapefile упакованый в zip формат" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Загрузить shapefile</div></div></a>
+<a href="#" onclick="CopySelFeature();"><div title="Copy selected features" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Копировать выделенные элементы</div></div></a>
+<a href="#" onclick="PasteSelFeature();"><div title="Paste copied features" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Вставить скопированные элементы</div></div></a>
 <a href="#" onclick="UploadFileAsc();"><div title="выберите ArcGrid файл в asc format" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Загрузить ArcGrid file</div></div></a>
 <a href="#" onclick="ExportFileAsc();"><div title="Экспорт  слой с Гридом(Heatmap, IDW interpolation) в формат ArcGrid ASCII" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Экспорт в ArcGrid формат</div></div></a>
 <a href="#" onclick="NewArcGridLayer();"><div title="Создать новый слой из файла ArcGrid ASCII" class="podpunkt" onMouseOver="overPunkt2(this);" onMouseOut="outPunkt2(this);"><div>Новый слой из файла ArcGrid</div></div></a>
