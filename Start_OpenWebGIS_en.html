@@ -13116,9 +13116,9 @@ callback: alert ("it's OK")
 function CopySelFeature()
 {
 
-   
+    
 if(this.document.getElementById("editL1").value=="0")
-{alert ("Please select name of Layer in combobox 'Editable Layer'"); return;} 
+{ alert ("Please select name of Layer in combobox 'Editable Layer'"); return;} 
 if(edilayerMainLayer.selectedFeatures.length==0){alert ("Please select features");return;}
 var format = new OpenLayers.Format.GeoJSON({});
 var jsonstringCopy = format.write(edilayerMainLayer.selectedFeatures);
