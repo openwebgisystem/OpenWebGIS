@@ -10397,8 +10397,8 @@ var DivEditeLeg=document.createElement("div");DivEditeLeg.id="PasteSelFeaturePop
 DivEditeLeg.className="id_divRoutLegMain";DivEditeLeg.style.position="relative";
 DivEditeLeg.innerHTML='<div id="PasteSelFeaturePopup_Leg" style="background:#ffffff; color:#0000ff;z-index: 1400;position:absolute;left:'+Math.round(leftLeft+50)+'px;top:'+Math.round(topTop-180)+
 'px;overflow:hidden; border: 1px solid black;"><img onclick="closeWearherLegendWin(this)" src="openlayers/theme/default/img/close.gif" style="position:relative; top:10px;float:right; cursor:pointer"><a style="position:relative; top:20px"></a>'+
-'<a style="font-size: 9px;"> Вы можете перемещать это окно если щёлкните по пункту меню: Интерфейс->переключить режим интерфейса</a><br>'+
-'Выберите слой для того, что бы вставить элементы:<br>'+
+'<a style="font-size: 9px;"> Вы можете перемещать это окно, если щёлкните по пункту меню: Интерфейс->переключить режим интерфейса</a><br>'+
+'Выберите слой для того, чтобы вставить элементы:<br>'+
 '<select id="PasteSelFeatureSelLay" >'+
  '<option selected value="0"></option></select>'+
  '<p> <button type=button onclick= PasteSelFeature_OK()>OK</button></p>'+
@@ -10423,17 +10423,18 @@ for (var i=0;i<map.layers.length;i++)
 {
 if (map.layers[i].CLASS_NAME=="OpenLayers.Layer.Vector"&&map.layers[i].name==document.getElementById("PasteSelFeatureSelLay").value)
 {   
-for(h in  map.layers[i].features[0].attributes)
-{ 
+
 for (var ii=0;ii<varCopySelFeature.length;ii++)
-{var objnew={};for(hh in varCopySelFeature[ii].attributes){if(hh==h){}else{if(varCopySelFeature[ii].attributes[h]){}else{objnew[h]='';varCopySelFeature[ii].attributes[h]=''} } } 
-for (tt in varCopySelFeature[ii].attributes){objnew[tt]=varCopySelFeature[ii].attributes[tt]}
-varCopySelFeature[ii].attributes=objnew;
-} } 
+{var objnew={};for(h in  map.layers[i].features[0].attributes)
+{ for(hh in varCopySelFeature[ii].attributes){if(hh==h){objnew[h]=varCopySelFeature[ii].attributes[hh]}
+else{if(varCopySelFeature[ii].attributes[h]){/*objnew[h]=varCopySelFeature[ii].attributes[h]*/}else{objnew[h]='';/*varCopySelFeature[ii].attributes[h]=''*/} } } 
+/*for (tt in varCopySelFeature[ii].attributes){objnew[tt]=varCopySelFeature[ii].attributes[tt]}*/
+
+} for (tt in varCopySelFeature[ii].attributes){objnew[tt]=varCopySelFeature[ii].attributes[tt]};varCopySelFeature[ii].attributes=objnew;rtt=objnew; } 
 
  rtt=arfeatAtrr; 
 
-map.layers[i].addFeatures(varCopySelFeature);
+
 for (var s=0;s<map.layers[i].features.length;s++)
 {for(h in varCopySelFeature[0].attributes)
 {
@@ -10443,6 +10444,7 @@ else{if(map.layers[i].features[s].attributes[h]){}else{map.layers[i].features[s]
 }
 }
  }
+ map.layers[i].addFeatures(varCopySelFeature);
 alert("All done");
 }
 
