@@ -24910,7 +24910,7 @@ localStorage["Project"]=SaveProject2()
 alert("OK. Проект сохранён в локальном хранилище (local Storage) вашего браузера");
 }
 function LoadProject(loadfree)
-{localStorageOpenWebGIS=localStorageOpenWebGIS.replace(/ ;and_owg; /g,"&");
+{if(localStorageOpenWebGIS){localStorageOpenWebGIS=localStorageOpenWebGIS.replace(/ ;and_owg; /g,"&");}
 if(loadfree!==true)
 {if(!window.localStorage["Project"]||localStorage["Project"]==''){alert("No saved project"); return;}}
 var g=map.layers.length;var ListL=document.getElementById('editL1');
