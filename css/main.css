@@ -29,6 +29,19 @@
      box-shadow: inset rgba(0,0,0,.6) 0 -1px 3px, inset rgba(252,255,255,.7) 0 3px 3px, rgba(0,0,0,.8) 0 3px 3px -1px;
      border-radius: 15px;
 }
+ .Weathclass_r {
+     height:30px;
+     border-color:#50F078 #9bb838 #9bb838 #50F078;
+     border-style:solid;
+    border-width:1px;
+    background:#50F078;
+     position:relative;
+    top:25px;
+    left:885px;
+    cursor:pointer;
+     box-shadow: inset rgba(0,0,0,.6) 0 -1px 3px, inset rgba(252,255,255,.7) 0 3px 3px, rgba(0,0,0,.8) 0 3px 3px -1px;
+     border-radius: 15px;
+}
  .Weathclass:hover {
      border-color:#FFCC66 #FFFF99 #FFFF99 #FFCC66;
      border-style:solid;
@@ -61,6 +74,19 @@
     background:#50F078;
      position:relative;
     top:-130px;
+    left:800px;
+    cursor:pointer;
+     box-shadow: inset rgba(0,0,0,.6) 0 -1px 3px, inset rgba(252,255,255,.7) 0 3px 3px, rgba(0,0,0,.8) 0 3px 3px -1px;
+     border-radius: 15px;
+}
+ .NewInterfaceclass_r {
+     height:30px;
+     border-color:#50F078 #9bb838 #9bb838 #50F078;
+     border-style:solid;
+    border-width:1px;
+    background:#50F078;
+     position:relative;
+    top:-30px;
     left:800px;
     cursor:pointer;
      box-shadow: inset rgba(0,0,0,.6) 0 -1px 3px, inset rgba(252,255,255,.7) 0 3px 3px, rgba(0,0,0,.8) 0 3px 3px -1px;
@@ -236,7 +262,7 @@
 }
  .menu {
      background:#50f078;
-     width:1457px;
+     width:1600px;
     height:25px;
     /*margin-left:230px;
     */
@@ -266,7 +292,7 @@
      cursor:move;
 }
  .block_menu {
-     width:1290px;
+     width:1600px;
     height:25px;
     left:5px;
     cursor:default;
