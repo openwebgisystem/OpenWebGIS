@@ -18744,11 +18744,6 @@ document.getElementById("RenameLPopup").onmousedown=function(event){drags(event)
 document.getElementById("RenameLPopup").onmouseup=function(e){enddrag()};
 popupReName.updateSize();
 }
-function Donate()
-{
-var myWinTable= open("support.htm", "_blank",
- "width=900,height=500,status=yes,toolbar=yes,menubar=yes,scrollbars=yes");
-}
 function closeWeathWinSel()
 {document.getElementById("id_divWeatherMainSel").parentNode.removeChild(document.getElementById("id_divWeatherMainSel"));}
 function Weather_SelectOk()
@@ -25339,16 +25334,8 @@ function colorEdit(obj){ colorWin= open("color.htm", "Edit Color interface",
 </h3>
 <div id="colorMain" style="position:relative;top:30px;left:180px" align="left"> <img id="colorColorMain" title="изменить цвет фона" src="img/color.png" onclick="colorEdit(this)" > </div>
 <div onclick="Login()" style="position:relative;left:390px;top:-120px;bottom:50px;width:50px; height:20px;background:#082567; color:#ffffff; cursor:pointer">Login</div></div>
-<input type="button" id="buttonWeather_id" value="Погода" class="Weathclass" onclick="Weather_Layer()"/>
-<input id="buttonNewInterface_id" type="button" value="Новый интерфейс" class="NewInterfaceclass" onclick="Change_InterfaceNew()"/>
-<!--<input type="button" value="Помощь проекту" class="Donclass" onclick="Donate()"/>-->
-<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top" class="DonPclass">
-<input type="hidden" name="cmd" value="_s-xclick">
-<input type="hidden" name="hosted_button_id" value="2VTYZJ88BKZBG">
-<input type="image" src="https://www.paypalobjects.com/ru_RU/RU/i/btn/btn_donateCC_LG.gif" border="0" name="submit" alt="PayPal — более безопасный и легкий способ оплаты через Интернет!">
-<img alt="" border="0" src="https://www.paypalobjects.com/ru_RU/i/scr/pixel.gif" width="1" height="1">
-</form>
-
+<input type="button" id="buttonWeather_id" value="Погода" class="Weathclass_r" onclick="Weather_Layer()"/>
+<input id="buttonNewInterface_id" type="button" value="Новый интерфейс" class="NewInterfaceclass_r" onclick="Change_InterfaceNew()"/>
 </div>
 <div id="inf_contacts_id" style="position:absolute;top:65px;left:220px;cursor:pointer;width:200px">
 <a href="https://plus.google.com/112343419546545616455/posts" target="_blank"><img src="img/g.png" ></a>
@@ -25489,8 +25476,7 @@ function colorEdit(obj){ colorWin= open("color.htm", "Edit Color interface",
 ><div class="list_punkts"><div class="kont">
 </div></div>
 </div>
-<div class="punkt" onMouseOver="overPunkt(this);" onMouseOut="outPunkt(this);" ><div><a href="support.htm" target="_blank" title="Щелкните левой клавишей" style="color: #efe4b0; font: 1em Arial, sans-serif; text-shadow: #0000ff 0 0 2px;">Поддержите проект</a></div
-><div class="list_punkts"><div class="kont">
+<div class="punkt" onMouseOver="overPunkt(this);" onMouseOut="outPunkt(this);" ><div class="list_punkts"><div class="kont">
 </div></div>
 </div>
 <div class="punkt" onMouseOver="overPunkt(this);" onMouseOut="outPunkt(this);" ><div id="id_ContactsOpenGis"><a onclick="Contact();" title="Щелкните левой клавишей" style="color: #efe4b0; font: 1em Arial, sans-serif; text-shadow: #0000ff 0 0 2px;">Контакты</a></div
@@ -25501,7 +25487,7 @@ function colorEdit(obj){ colorWin= open("color.htm", "Edit Color interface",
 ><div class="list_punkts"><div class="kont">
 </div></div>
 </div>
-<div class="punkt" onMouseOver="overPunkt(this);" onMouseOut="outPunkt(this);" ><div><a href="download/javascriptCodeOpenWebGIS20151014.zip" target="_blank" title="Javascript and html source code" style="color: #efe4b0; font: 1em Arial, sans-serif; text-shadow: #0000ff 0 0 2px;">JavascriptSourceCode</a></div
+<div class="punkt" onMouseOver="overPunkt(this);" onMouseOut="outPunkt(this);" ><div><a href="https://github.com/openwebgisystem/OpenWebGIS" target="_blank" title="Javascript and html source code" style="color: #efe4b0; font: 1em Arial, sans-serif; text-shadow: #0000ff 0 0 2px;">JavascriptSourceCode</a></div
 ><div class="list_punkts"><div class="kont">
 </div></div>
 </div>
