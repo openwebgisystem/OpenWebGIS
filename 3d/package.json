@@ -36,7 +36,7 @@
     "bluebird": "3.1.5",
     "compression": "1.6.1",
     "event-stream": "3.3.2",
-    "express": "4.13.4",
+    "express": "4.19.2",
     "globby": "4.0.0",
     "gulp": "3.9.0",
     "gulp-insert": "0.5.0",
